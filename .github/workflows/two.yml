@@ -9,7 +9,7 @@ jobs:
     steps:
       - name: "Get Language List"
         id: "get-language-list"
-        run: "Write-Output \"::set-output name=value::$(ConvertTo-Json $(ForEach-Object ($entry in (Invoke-WebRequest -Uri https://api.github.com/repos/MultiMC/MultiMC5/languages -Method Get -UseBasicParsing | Select-Object -ExpandProperty Content | ConvertFrom-Json).PSObject.Properties) {$entry.Name.ToLower()}))\""
+        run: "Write-Output \"::set-output name=value::$(ConvertTo-Json $(ForEach ($entry in (Invoke-WebRequest -Uri https://api.github.com/repos/MultiMC/MultiMC5/languages -Method Get -UseBasicParsing | Select-Object -ExpandProperty Content | ConvertFrom-Json).PSObject.Properties) {$entry.Name.ToLower()}))\""
         shell: "pwsh"
       - name: "Recall"
         if: "${{contains(fromJSON(steps.get-language-list.outputs.value), 'c++')}}"
