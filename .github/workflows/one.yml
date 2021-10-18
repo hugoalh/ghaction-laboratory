@@ -8,15 +8,10 @@ jobs:
     runs-on: "ubuntu-latest"
     steps:
       - name: "Checkout Repository"
-        uses: "actions/checkout@v2.3.4"
-      - name: "Get Package Name"
-        id: "get-package-name"
-        run: "Write-Output \"::set-output name=value::$(Get-Content .\\package.json -Encoding UTF8 -Raw | ConvertFrom-Json | Select -ExpandProperty name)\""
+        uses: "actions/checkout@v2.3.5"
+      - name: "Test"
+        run: |
+          $packageContent = (Get-Content -Path .\package.json -Encoding utf8NoBOM -Raw)
+          $packageOriginalName = (ConvertFrom-Json -InputObject $packageContent | Select-Object -ExpandProperty name)
+          Write-Output -InputObject "$(($packageContent).Replace($packageOriginalName, @${{github.repository}}))"
         shell: "pwsh"
-      - name: "Get Package Version"
-        id: "get-package-version"
-        run: "Write-Output \"::set-output name=value::$(Get-Content .\\package.json -Encoding UTF8 -Raw | ConvertFrom-Json | Select -ExpandProperty version)\""
-        shell: "pwsh"
-      - name: "Recall"
-        run: "echo \"${{steps.get-package-name.outputs.value}}@${{steps.get-package-version.outputs.value}}\""
-        shell: "bash"
