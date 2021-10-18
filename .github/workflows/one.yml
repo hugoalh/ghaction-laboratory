@@ -13,5 +13,5 @@ jobs:
         run: |
           $packageContent = (Get-Content -Path .\package.json -Encoding utf8NoBOM -Raw)
           $packageOriginalName = (ConvertFrom-Json -InputObject $packageContent | Select-Object -ExpandProperty name)
-          Write-Output -InputObject "$(($packageContent).Replace($packageOriginalName, @${{github.repository}}))"
+          Write-Output -InputObject "$(($packageContent).Replace($packageOriginalName, "@${{github.repository}}"))"
         shell: "pwsh"
