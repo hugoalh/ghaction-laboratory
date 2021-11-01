@@ -7,34 +7,6 @@ jobs:
     name: "Default"
     runs-on: "ubuntu-latest"
     steps:
-      - name: "Test"
-        id: "test"
-        uses: "hugoalh/replaceholder-ghaction@main"
-        with:
-          target: |
-            external: "%external%"
-            payload: "%payload%"
-          list_external: |
-            foo: "bar"
-            number: 10
-  use-docker:
-    name: "Use Docker"
-    runs-on: "ubuntu-latest"
-    steps:
-      - name: "Test"
-        id: "test"
-        uses: "hugoalh/replaceholder-ghaction/use-docker@main"
-        with:
-          target: |
-            external: "%external%"
-            payload: "%payload%"
-          list_external: |
-            foo: "bar"
-            number: 10
-  use-nodejs:
-    name: "Use NodeJS"
-    runs-on: "ubuntu-latest"
-    steps:
       - name: "Setup NodeJS"
         uses: "actions/setup-node@v2.4.1"
         with:
@@ -45,9 +17,7 @@ jobs:
         id: "test"
         uses: "hugoalh/replaceholder-ghaction/use-nodejs@main"
         with:
-          target: |
-            external: "%external%"
-            payload: "%payload%"
+          target: "foo"
           list_external: |
             foo: "bar"
             number: 10
