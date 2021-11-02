@@ -7,15 +7,15 @@ jobs:
     name: "Default"
     runs-on: "ubuntu-latest"
     steps:
-      - name: "Setup NodeJS"
-        uses: "actions/setup-node@v2.4.1"
-        with:
-          node-version: 14
-          check-latest: true
-          registry-url: "https://registry.npmjs.org/"
+      # - name: "Setup NodeJS"
+      #   uses: "actions/setup-node@v2.4.1"
+      #   with:
+      #     node-version: 14
+      #     check-latest: true
+      #     registry-url: "https://registry.npmjs.org/"
       - name: "Test"
         id: "test"
-        uses: "hugoalh/trigger-ifttt-webhook-applet-ghaction/use-nodejs@main"
+        uses: "hugoalh/trigger-ifttt-webhook-applet-ghaction/use-powershell@main"
         with:
           eventname: "test"
           key: "test"
