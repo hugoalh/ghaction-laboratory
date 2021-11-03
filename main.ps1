@@ -15,10 +15,7 @@ if ($dryrun -eq $true) {
 	Write-Output -InputObject "Payload Content: $payloadStringify"
 	$payloadFakeStringify = (ConvertFrom-Json -InputObject '{"body": "bar", "title": "foo", "userId": 1}' -Depth 100 | ConvertTo-Json -Depth 100 -Compress)
 	Write-Output -InputObject "Post network request to test service."
-	$response = Invoke-WebRequest -UseBasicParsing -Uri "https://jsonplaceholder.typicode.com/posts" -UserAgent $ghactionUserAgent -MaximumRedirection 5 -Method Post -Body $payloadFakeStringify -ContentType "application/json"
-	foreach ($element in $response) {
-		Write-Output -InputObject "$($element.Name): $($element.Value)"
-	}
+	Invoke-WebRequest -UseBasicParsing -Uri "https://jsonplaceholder.typicode.com/posts" -UserAgent $ghactionUserAgent -MaximumRedirection 5 -Method Post -Body $payloadFakeStringify -ContentType "application/json; charset=utf-8"
 } else {
 	Write-Output -InputObject "Post network request to IFTTT."
 	Write-Output -InputObject "::debug::Event Name: $eventName"
@@ -29,8 +26,5 @@ if ($dryrun -eq $true) {
 		$webRequestURL += "/json"
 	}
 	$webRequestURL += "/with/key/$key"
-	$response = Invoke-WebRequest -UseBasicParsing -Uri $webRequestURL -UserAgent $ghactionUserAgent -MaximumRedirection 5 -Method Post -Body $payloadStringify -ContentType "application/json"
-	foreach ($element in $response) {
-		Write-Output -InputObject "::debug::$($element.Name): $($element.Value)"
-	}
+	Invoke-WebRequest -UseBasicParsing -Uri $webRequestURL -UserAgent $ghactionUserAgent -MaximumRedirection 5 -Method Post -Body $payloadStringify -ContentType "application/json; charset=utf-8"
 }
