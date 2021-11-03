@@ -3,19 +3,12 @@ name: "IFTTT"
 on:
   workflow_dispatch:
 jobs:
-  default:
-    name: "Default"
+  main:
+    name: "Main"
     runs-on: "ubuntu-latest"
     steps:
-      # - name: "Setup NodeJS"
-      #   uses: "actions/setup-node@v2.4.1"
-      #   with:
-      #     node-version: 14
-      #     check-latest: true
-      #     registry-url: "https://registry.npmjs.org/"
       - name: "Test"
-        id: "test"
-        uses: "hugoalh/trigger-ifttt-webhook-applet-ghaction/use-powershell@main"
+        uses: "hugoalh/ghaction-laboratory/use-powershell@main"
         with:
           eventname: "test"
           key: "test"
