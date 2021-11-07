@@ -1,0 +1,77 @@
+# $<Schema>$ https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions
+name: "IFTTT"
+on:
+  workflow_dispatch:
+jobs:
+  docker:
+    name: "Docker"
+    runs-on: "ubuntu-latest"
+    steps:
+      - name: "Test"
+        uses: "hugoalh/trigger-ifttt-webhook-applet-ghaction/use-docker@main"
+        with:
+          eventname: "test"
+          key: "test"
+          arbitrary: true
+          payload: |
+            {
+              "this": [
+                {
+                  "is": {
+                    "some": [
+                      "test",
+                      "data"
+                    ]
+                  }
+                }
+              ]
+            }
+          dryrun: true
+  nodejs:
+    name: "NodeJS"
+    runs-on: "ubuntu-latest"
+    steps:
+      - name: "Test"
+        uses: "hugoalh/trigger-ifttt-webhook-applet-ghaction/use-nodejs@main"
+        with:
+          eventname: "test"
+          key: "test"
+          arbitrary: true
+          payload: |
+            {
+              "this": [
+                {
+                  "is": {
+                    "some": [
+                      "test",
+                      "data"
+                    ]
+                  }
+                }
+              ]
+            }
+          dryrun: true
+  powershell:
+    name: "PowerShell"
+    runs-on: "ubuntu-latest"
+    steps:
+      - name: "Test"
+        uses: "hugoalh/trigger-ifttt-webhook-applet-ghaction/use-powershell@main"
+        with:
+          eventname: "test"
+          key: "test"
+          arbitrary: true
+          payload: |
+            {
+              "this": [
+                {
+                  "is": {
+                    "some": [
+                      "test",
+                      "data"
+                    ]
+                  }
+                }
+              ]
+            }
+          dryrun: true
