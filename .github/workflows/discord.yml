@@ -1,5 +1,5 @@
 # $<Schema>$ https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions
-name: "IFTTT"
+name: "Discord"
 on:
   workflow_dispatch:
 jobs:
