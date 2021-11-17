@@ -73,4 +73,3 @@ jobs:
               "README.md"
             ]
           wait: true
-          dryrun: true
