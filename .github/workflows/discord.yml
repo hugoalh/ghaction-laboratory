@@ -70,6 +70,6 @@ jobs:
             }
           files: |
             [
-              "package.json"
+              "README.md"
             ]
           wait: true
