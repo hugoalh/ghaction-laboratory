@@ -68,4 +68,8 @@ jobs:
                 }
               ]
             }
+          files: |
+            [
+              "package.json"
+            ]
           wait: true
