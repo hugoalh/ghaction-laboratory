@@ -7,6 +7,8 @@ jobs:
     name: "Docker"
     runs-on: "ubuntu-latest"
     steps:
+      - name: "Checkout Repository"
+        uses: "actions/checkout@v2.4.0"
       - uses: "hugoalh/send-discord-webhook-ghaction/use-docker@main"
         with:
           key: "${{secrets.DISCORD_WEBHOOK_KEY}}"
@@ -59,10 +61,17 @@ jobs:
                 }
               ]
             }
+          files: |
+            [
+              "package.json",
+              "README.md"
+            ]
   nodejs:
     name: "NodeJS"
     runs-on: "ubuntu-latest"
     steps:
+      - name: "Checkout Repository"
+        uses: "actions/checkout@v2.4.0"
       - name: "Setup NodeJS"
         uses: "actions/setup-node@v2.4.1"
         with:
@@ -121,3 +130,8 @@ jobs:
                 }
               ]
             }
+          files: |
+            [
+              "package.json",
+              "README.md"
+            ]
