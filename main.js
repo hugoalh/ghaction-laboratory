@@ -320,7 +320,7 @@ function $importInput(key) {
 					"id": filesIndex,
 					"filename": fileName
 				});
-				requestBody.append(`file${filesIndex}`, fileSystemCreateReadStream(fileFullPath));
+				requestBody.append(`files[${filesIndex}]`, fileSystemCreateReadStream(fileFullPath));
 			};
 		};
 		requestBody.append("payload_json", JSON.stringify(payload));
