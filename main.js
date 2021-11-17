@@ -1,18 +1,13 @@
-import { debug as ghactionDebug, error as ghactionError, getInput as ghactionGetInput, info as ghactionInformation, setSecret as ghactionSetSecret, warning as ghactionWarning } from "@actions/core";
+import { accessSync as fileSystemAccessSync, constants as fileSystemConstants, createReadStream as fileSystemCreateReadStream, readFileSync as fileSystemReadFileSync } from "fs";
 import { basename as pathFileName, dirname as pathDirectoryName, join as pathJoin } from "path";
+import { debug as ghactionDebug, error as ghactionError, getInput as ghactionGetInput, info as ghactionInformation, setSecret as ghactionSetSecret, warning as ghactionWarning } from "@actions/core";
 import { fileURLToPath, URLSearchParams } from "url";
 import { isArray as adIsArray, isJSON as adIsJSON, isString as adIsString } from "@hugoalh/advanced-determine";
-import { accessSync as fileSystemAccessSync, constants as fileSystemConstants, createReadStream as fileSystemCreateReadStream, readFileSync as fileSystemReadFileSync } from "fs";
 import { stringOverflow as mmStringOverflow, stringParse as mmStringParse } from "@hugoalh/more-method";
 import Ajv2020 from "ajv/dist/2020.js";
 import ajvFormat from "ajv-formats";
 import ajvFormatsDraft2019 from "ajv-formats-draft2019";
 import nodeFetch from "node-fetch";
-import { inspect } from "util";
-const discordWebhookQuery = new URLSearchParams();
-const ghactionActionDirectory = pathDirectoryName(fileURLToPath(import.meta.url));
-const ghactionUserAgent = "SendDiscordWebhook.GitHubAction/4.0.0";
-const ghactionWorkspaceDirectory = process.env.GITHUB_WORKSPACE;
 const ajv = new Ajv2020({
 	$comment: false,
 	$data: false,
@@ -36,7 +31,11 @@ const ajv = new Ajv2020({
 });
 ajvFormat(ajv);
 ajvFormatsDraft2019(ajv);
-let jsonSchemaValidator = ajv.compile(JSON.parse(fileSystemReadFileSync(
+const discordWebhookQuery = new URLSearchParams();
+const ghactionActionDirectory = pathDirectoryName(fileURLToPath(import.meta.url));
+const ghactionUserAgent = "SendDiscordWebhook.GitHubAction/4.0.0";
+const ghactionWorkspaceDirectory = process.env.GITHUB_WORKSPACE;
+const jsonSchemaValidator = ajv.compile(JSON.parse(fileSystemReadFileSync(
 	pathJoin(ghactionActionDirectory, "discord-webhook-payload-custom.schema.json"),
 	{
 		encoding: "utf8",
@@ -269,9 +268,11 @@ function $importInput(key) {
 		};
 	};
 	let files = mmStringParse($importInput("files"));
-	if (files === "[]") {
+	/* Bug #mmsp1 Bypass - Start (See https://github.com/hugoalh-studio/more-method-nodejs/issues/96) */
+	if (typeof files === "string" && files.search(/^\s*\[\s*\]\s*$/gu) === 0) {
 		files = [];
 	};
+	/* Bug #mmsp1 Bypass - End */
 	if (adIsArray(files, {
 		checkElements: (element) => {
 			return (adIsString(element) === true);
@@ -306,10 +307,12 @@ function $importInput(key) {
 	};
 	let payloadStringify = JSON.stringify(payload);
 	let requestBody;
-	let requestContentType;
+	let requestBodyInspect;
+	let requestHeader;
 	let requestQuery = discordWebhookQuery.toString();
 	if (method === "form") {
 		const FormData = (await import("form-data")).default;
+		const utility = (await import("util")).default;
 		requestBody = new FormData();
 		if (files.length > 0) {
 			payload.attachments = [];
@@ -324,13 +327,31 @@ function $importInput(key) {
 			};
 		};
 		requestBody.append("payload_json", JSON.stringify(payload));
-		requestContentType = "multipart/form-data";
+		requestBodyInspect = utility.inspect(
+			requestBody,
+			{
+				breakLength: Infinity,
+				colors: true,
+				compact: false,
+				depth: Infinity,
+				maxArrayLength: Infinity,
+				showHidden: false
+			}
+		);
+		requestHeader = {
+			"User-Agent": ghactionUserAgent,
+			...requestBody.getHeaders()
+		};
 	} else {
 		requestBody = payloadStringify;
-		requestContentType = "application/json";
+		requestBodyInspect = payloadStringify;
+		requestHeader = {
+			"Content-Type": "application/json",
+			"User-Agent": ghactionUserAgent
+		};
 	};
-	/*if (dryRun === true) {
-		ghactionInformation(inspect(requestBody, { colors: true, depth: Infinity, showHidden: true, breakLength: Infinity, maxArrayLength: Infinity, compact: false }));
+	if (dryRun === true) {
+		ghactionInformation(`Payload Content: ${requestBodyInspect}`);
 		let payloadFakeStringify = JSON.stringify({
 			body: "bar",
 			title: "foo",
@@ -356,18 +377,15 @@ function $importInput(key) {
 		} else {
 			throw new Error(`Status Code: ${response.status}\nResponse: ${responseText}`);
 		};
-	} else {*/
-		ghactionDebug(inspect(requestBody, { colors: true, depth: Infinity, showHidden: true, breakLength: Infinity, maxArrayLength: Infinity, compact: false }));
+	} else {
+		ghactionDebug(`Payload Content: ${requestBodyInspect}`);
 		ghactionInformation(`Post network request to Discord.`);
 		let response = await nodeFetch(
 			`https://discord.com/api/webhooks/${key}${(requestQuery.length > 0) ? `?${requestQuery}` : ""}`,
 			{
 				body: requestBody,
 				follow: 5,
-				headers: {
-					"User-Agent": ghactionUserAgent,
-					...requestBody.getHeaders()
-				},
+				headers: requestHeader,
 				method: "POST",
 				redirect: "follow"
 			}
@@ -378,7 +396,7 @@ function $importInput(key) {
 		} else {
 			throw new Error(`Status Code: ${response.status}\nResponse: ${responseText}`);
 		};
-	/*};*/
+	};
 })().catch((reason) => {
 	ghactionError(reason);
 	process.exit(1);
