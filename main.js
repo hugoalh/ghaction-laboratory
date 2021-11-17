@@ -365,7 +365,7 @@ function $importInput(key) {
 				body: requestBody,
 				follow: 5,
 				headers: {
-					/*"Content-Type": requestContentType,*/
+					"Content-Type": requestContentType,
 					"User-Agent": ghactionUserAgent,
 					...requestBody.getHeaders()
 				},
