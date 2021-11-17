@@ -316,14 +316,14 @@ function $importInput(key) {
 			for (let filesIndex = 0; filesIndex < files.length; filesIndex++) {
 				let fileFullPath = pathJoin(ghactionWorkspaceDirectory, files[filesIndex]);
 				let fileName = pathFileName(fileFullPath);
-				payload.attachments.push({
+				/*payload.attachments.push({
 					"id": filesIndex,
 					"filename": fileName
-				});
-				requestBody.append(`files[${filesIndex}]`, fileSystemCreateReadStream(fileFullPath), { filename: fileName });
+				});*/
+				requestBody.append(`file${filesIndex}`, fileSystemCreateReadStream(fileFullPath));
 			};
 		};
-		requestBody.append("payload_json", JSON.stringify(payload), { contentType: "application/json" });
+		requestBody.append("payload_json", JSON.stringify(payload));
 		requestContentType = "multipart/form-data";
 	} else {
 		requestBody = payloadStringify;
@@ -365,7 +365,7 @@ function $importInput(key) {
 				body: requestBody,
 				follow: 5,
 				headers: {
-					"Content-Type": requestContentType,
+					/*"Content-Type": requestContentType,*/
 					"User-Agent": ghactionUserAgent,
 					...requestBody.getHeaders()
 				},
