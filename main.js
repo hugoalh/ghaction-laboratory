@@ -329,9 +329,9 @@ function $importInput(key) {
 		requestBody = payloadStringify;
 		requestContentType = "application/json";
 	};
-	/*if (dryRun === true) {*/
+	/*if (dryRun === true) {
 		ghactionInformation(inspect(requestBody, { colors: true, depth: Infinity, showHidden: true, breakLength: Infinity, maxArrayLength: Infinity, compact: false }));
-		/*let payloadFakeStringify = JSON.stringify({
+		let payloadFakeStringify = JSON.stringify({
 			body: "bar",
 			title: "foo",
 			userId: 1
@@ -356,8 +356,7 @@ function $importInput(key) {
 		} else {
 			throw new Error(`Status Code: ${response.status}\nResponse: ${responseText}`);
 		};
-	} else {
-		ghactionDebug(`Payload Content: ${requestBody}`);
+	} else {*/
 		ghactionDebug(inspect(requestBody, { colors: true, depth: Infinity, showHidden: true, breakLength: Infinity, maxArrayLength: Infinity, compact: false }));
 		ghactionInformation(`Post network request to Discord.`);
 		let response = await nodeFetch(
@@ -379,7 +378,7 @@ function $importInput(key) {
 		} else {
 			throw new Error(`Status Code: ${response.status}\nResponse: ${responseText}`);
 		};
-	};*/
+	/*};*/
 })().catch((reason) => {
 	ghactionError(reason);
 	process.exit(1);
