@@ -329,10 +329,9 @@ function $importInput(key) {
 		requestBody = payloadStringify;
 		requestContentType = "application/json";
 	};
-	if (dryRun === true) {
-		ghactionInformation(`Payload Content: ${requestBody}`);
+	/*if (dryRun === true) {*/
 		ghactionInformation(inspect(requestBody, { colors: true, depth: Infinity, showHidden: true, breakLength: Infinity, maxArrayLength: Infinity, compact: false }));
-		let payloadFakeStringify = JSON.stringify({
+		/*let payloadFakeStringify = JSON.stringify({
 			body: "bar",
 			title: "foo",
 			userId: 1
@@ -380,7 +379,7 @@ function $importInput(key) {
 		} else {
 			throw new Error(`Status Code: ${response.status}\nResponse: ${responseText}`);
 		};
-	};
+	};*/
 })().catch((reason) => {
 	ghactionError(reason);
 	process.exit(1);
