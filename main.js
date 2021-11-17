@@ -8,6 +8,7 @@ import Ajv2020 from "ajv/dist/2020.js";
 import ajvFormat from "ajv-formats";
 import ajvFormatsDraft2019 from "ajv-formats-draft2019";
 import nodeFetch from "node-fetch";
+import { inspect } from "util";
 const discordWebhookQuery = new URLSearchParams();
 const ghactionActionDirectory = pathDirectoryName(fileURLToPath(import.meta.url));
 const ghactionUserAgent = "SendDiscordWebhook.GitHubAction/4.0.0";
@@ -330,7 +331,7 @@ function $importInput(key) {
 	};
 	if (dryRun === true) {
 		ghactionInformation(`Payload Content: ${requestBody}`);
-		ghactionInformation(requestBody);
+		ghactionInformation(inspect(requestBody, { colors: true, depth: Infinity, showHidden: true, breakLength: Infinity, maxArrayLength: Infinity, compact: false }));
 		let payloadFakeStringify = JSON.stringify({
 			body: "bar",
 			title: "foo",
@@ -358,7 +359,7 @@ function $importInput(key) {
 		};
 	} else {
 		ghactionDebug(`Payload Content: ${requestBody}`);
-		ghactionDebug(requestBody);
+		ghactionDebug(inspect(requestBody, { colors: true, depth: Infinity, showHidden: true, breakLength: Infinity, maxArrayLength: Infinity, compact: false }));
 		ghactionInformation(`Post network request to Discord.`);
 		let response = await nodeFetch(
 			`https://discord.com/api/webhooks/${key}${(requestQuery.length > 0) ? `?${requestQuery}` : ""}`,
