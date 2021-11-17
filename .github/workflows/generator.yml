@@ -8,6 +8,10 @@ jobs:
     runs-on: "ubuntu-latest"
     steps:
       - run: |
-          Set-Content -Path ${{github.workspace}}/foo-DUC.md -Value '#foo\nbar' -Encoding utf8NoBOM
+          Set-Content -Path ${{github.workspace}}/foo-DUC.md -Value @"
+          #foo
+          
+          bar
+          "@ -Encoding utf8NoBOM
           Write-Output -InputObject $(Get-Content -Path ${{github.workspace}}/foo-DUC.md -Encoding utf8NoBOM -Raw)
         shell: "pwsh"
