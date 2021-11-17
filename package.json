@@ -1,31 +1,41 @@
 {
-	"name": "@hugoalh/foo-bar-boo",
-	"version": "1.0.0",
-	"description": "A module to foo bar boo.",
+	"name": "@hugoalh/send-discord-webhook-ghaction",
+	"version": "4.0.0-beta.1",
+	"description": "A GitHub Action to send a Discord webhook.",
 	"keywords": [
-		"bar",
-		"boo",
-		"foo"
+		"github-action",
+		"discord",
+		"send",
+		"webhook"
 	],
-	"homepage": "https://github.com/hugoalh/foo-bar-boo#readme",
+	"homepage": "https://github.com/hugoalh/send-discord-webhook-ghaction#readme",
 	"bugs": {
-		"url": "https://github.com/hugoalh/foo-bar-boo/issues"
+		"url": "https://github.com/hugoalh/send-discord-webhook-ghaction/issues"
 	},
 	"license": "MIT",
 	"author": "hugoalh",
-	"main": "./lib/main.js",
-	"module": "./lib/main.mjs",
+	"type": "module",
+	"main": "./main.js",
 	"exports": {
-		"import": "./lib/main.mjs",
-		"require": "./lib/main.js"
+		"import": "./main.js"
 	},
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/hugoalh/foo-bar-boo.git"
+		"url": "git+https://github.com/hugoalh/send-discord-webhook-ghaction.git"
+	},
+	"dependencies": {
+		"@actions/core": "^1.6.0",
+		"@hugoalh/advanced-determine": "^6.4.2",
+		"@hugoalh/more-method": "^0.6.0",
+		"ajv": "^8.8.1",
+		"ajv-formats": "^3.0.0-rc.0",
+		"ajv-formats-draft2019": "^1.6.1",
+		"form-data": "^4.0.0",
+		"node-fetch": "^3.1.0"
 	},
 	"engines": {
 		"node": ">= 14.15.0",
 		"npm": ">= 6.14.8"
 	},
-	"private": false
+	"private": true
 }
