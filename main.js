@@ -366,7 +366,8 @@ function $importInput(key) {
 				follow: 5,
 				headers: {
 					"Content-Type": requestContentType,
-					"User-Agent": ghactionUserAgent
+					"User-Agent": ghactionUserAgent,
+					...form.getHeaders()
 				},
 				method: "POST",
 				redirect: "follow"
