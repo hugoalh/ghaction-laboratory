@@ -1,9 +1,10 @@
-$mode = ($env:INPUT_MODE).ToLower()
-Write-Output -InputObject $mode
-Write-Output -InputObject $(Get-Location)
-Get-ChildItem -Path .\ -Force -Recurse
+$Mode = ($env:INPUT_MODE).ToLower()
+Write-Output -InputObject $Mode
+$CommitsRaw = $(git --no-pager log --format=%H)
+$Commits = $CommitsRaw.Split("\r?\n")
+Write-Output -InputObject $($Commits.Length)
 Exit 0
-# if (($mode -ne "fast") -and ($mode -ne "full")) {
+# if (($Mode -ne "fast") -and ($Mode -ne "full")) {
 # 	Write-Output -InputObject "::error title=Error::Invalid mode!"
 # }
 # function Execute-ClamScan {
@@ -11,6 +12,6 @@ Exit 0
 # }
 # Write-Output -InputObject "Scan current file system."
 # Execute-ClamScan
-# if ($mode -eq "full") {
+# if ($Mode -eq "full") {
 # 
 # }
