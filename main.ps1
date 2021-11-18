@@ -1,6 +1,6 @@
 $Mode = ($env:INPUT_MODE).ToLower()
 Write-Output -InputObject $Mode
-$CommitsRaw = $(git --no-pager log --format=%H)
+$CommitsRaw = $(/usr/bin/git --no-pager log --format=%H)
 $Commits = $CommitsRaw.Split("\r?\n")
 Write-Output -InputObject $($Commits.Length)
 Exit 0
