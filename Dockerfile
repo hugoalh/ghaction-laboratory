@@ -3,4 +3,4 @@ FROM alpine:3.14
 RUN ["apk", "add", "--update", "git"]
 # RUN ["freshclam"]
 COPY main.ps1 /
-CMD ["/usr/bin/pwsh", "-c", "/main.ps1"]
+CMD ["/main.ps1"]

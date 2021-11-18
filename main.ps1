@@ -1,3 +1,4 @@
+#!/usr/bin/env pwsh
 $Mode = ($env:INPUT_MODE).ToLower()
 Write-Output -InputObject $Mode
 $CommitsRaw = $(git --no-pager log --format=%H)
