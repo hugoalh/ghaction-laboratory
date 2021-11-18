@@ -1,5 +1,6 @@
 $mode = ($env:INPUT_MODE).ToLower()
 Write-Output -InputObject $mode
+Write-Output -InputObject $(Get-Location)
 Get-ChildItem -Path .\ -Force -Recurse
 Exit 0
 # if (($mode -ne "fast") -and ($mode -ne "full")) {
