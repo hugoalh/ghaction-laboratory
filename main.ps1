@@ -1,5 +1,6 @@
 $mode = ($env:INPUT_MODE).ToLower()
 Write-Output -InputObject $mode
+Get-ChildItem -Path .\ -Force -Recurse
 Exit 0
 # if (($mode -ne "fast") -and ($mode -ne "full")) {
 # 	Write-Output -InputObject "::error title=Error::Invalid mode!"
