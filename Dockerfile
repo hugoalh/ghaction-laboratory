@@ -4,4 +4,4 @@
 # ENV CLAMAV_NO_MILTERD true
 FROM mcr.microsoft.com/powershell:latest
 COPY main.ps1 /
-CMD ["/main.ps1"]
+CMD ["/usr/bin/pwsh", "-c", "/main.ps1"]
