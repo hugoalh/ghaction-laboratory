@@ -4,4 +4,4 @@ RUN ["apk", "add", "--update", "git"]
 # RUN ["freshclam"]
 FROM mcr.microsoft.com/powershell:latest
 COPY main.ps1 /
-CMD ["/usr/bin/pwsh", "-c", "/main.ps1"]
+ENTRYPOINT ["/usr/bin/pwsh", "-c", "/main.ps1"]
