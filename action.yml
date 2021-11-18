@@ -1,0 +1,15 @@
+# $<Schema>$ https://docs.github.com/en/actions/creating-actions/metadata-syntax-for-github-actions
+name: "Scan Virus"
+author: "hugoalh"
+description: "Scan virus in the GitHub Action runner workspace."
+inputs:
+  mode:
+    description: "{string} Method to scan."
+    required: false
+    default: "fast"
+runs:
+  using: "docker"
+  image: "Dockerfile"
+branding:
+  icon: "shield"
+  color: "red"
