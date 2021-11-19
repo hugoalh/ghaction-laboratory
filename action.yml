@@ -3,10 +3,10 @@ name: "Scan Virus"
 author: "hugoalh"
 description: "Scan virus in the GitHub Action runner workspace."
 inputs:
-  mode:
-    description: "{string} Method to scan."
+  gitdepth:
+    description: "{boolean} Also scan every Git commits."
     required: false
-    default: "fast"
+    default: "false"
 runs:
   using: "docker"
   image: "Dockerfile"

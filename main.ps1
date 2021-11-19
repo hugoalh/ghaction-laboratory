@@ -1,6 +1,5 @@
-apk add --update git
-$Mode = ($env:INPUT_MODE).ToLower()
-Write-Output -InputObject $Mode
+$GitDepth = [bool]::Parse($env:INPUT_GITDEPTH)
+Write-Output -InputObject "::debug::Git Depth: $GitDepth"
 $Commits = (git --no-pager log --format=%H) -split "\r?\n"
 Write-Output -InputObject $($Commits.Length)
 Write-Output -InputObject $Commits
