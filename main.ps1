@@ -47,7 +47,7 @@ if ($GitDepth -eq $true) {
 			$Commit = $Commits[$CommitsIndex]
 			Write-Output -InputObject "Checkout commit #$($CommitsIndex + 1)/$($CommitsLength): $Commit."
 			$Checkout = $(git checkout "$Commit" --quiet)
-			if (($Checkout -eq $null) -and ($Checkout -notmatch "fatal") -and ($Checkout -notmatch "error")) {
+			if (($Checkout -notmatch "fatal") -and ($Checkout -notmatch "error")) {
 				Execute-Scan -Message "commit $Commit" -SkipGitDatabase
 			} else {
 				$SetFail = $true
