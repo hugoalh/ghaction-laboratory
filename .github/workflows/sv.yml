@@ -10,3 +10,5 @@ jobs:
         with:
           fetch-depth: 0
       - uses: "hugoalh/ghaction-laboratory@main"
+        with:
+          gitdepth: true
