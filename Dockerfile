@@ -1,5 +1,4 @@
 FROM alpine:3.14
-FROM mcr.microsoft.com/powershell:latest
 
 # Setup PowerShell
 #X RUN ["apk", "add", "--update", "ca-certificates", "curl", "icu-libs", "krb5-libs", "less", "libgcc", "libintl", "libssl1.1", "libstdc++", "ncurses-terminfo-base", "tzdata", "userspace-rcu", "zlib"]
@@ -14,6 +13,7 @@ FROM mcr.microsoft.com/powershell:latest
 RUN ["apk", "add", "--update", "git"]
 
 #X RUN ["freshclam"]
+FROM mcr.microsoft.com/powershell:latest
 
 COPY main.ps1 /
 CMD ["pwsh", "-c", "/main.ps1"]
