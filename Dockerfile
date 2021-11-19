@@ -10,10 +10,8 @@ RUN ["chmod", "+x", "/opt/microsoft/powershell/7/pwsh"]
 RUN ["ln", "-s", "/opt/microsoft/powershell/7/pwsh", "/usr/bin/pwsh"]
 
 #X RUN ["apk", "add", "--update", "clamav-libunrar", "clamav-scanner", "freshclam", "git"]
-RUN ["apk", "add", "--update", "git"]
+#X RUN ["apk", "add", "--update", "git"]
 
 #X RUN ["freshclam"]
-#X FROM mcr.microsoft.com/powershell:latest
-
 COPY main.ps1 /
-CMD ["pwsh", "-c", "/main.ps1"]
+CMD ["pwsh", "-NonInteractive", "/main.ps1"]

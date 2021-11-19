@@ -1,7 +1,7 @@
+apk add --update git
 $Mode = ($env:INPUT_MODE).ToLower()
 Write-Output -InputObject $Mode
-$CommitsRaw = $(git --no-pager log --format=%H)
-$Commits = [regex]::split($CommitsRaw, "\r?\n")
+$Commits = (git --no-pager log --format=%H) -split "\r?\n"
 Write-Output -InputObject $($Commits.Length)
 Write-Output -InputObject $Commits
 Exit 0
