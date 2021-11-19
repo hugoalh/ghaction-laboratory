@@ -12,16 +12,16 @@ function Execute-Scan {
 	foreach ($Element in $Elements) {
 		Write-Output -InputObject "::debug::- $Element"
 	}
-	$ElementsTotalCount += $Elements.Longlength
+	$script:ElementsTotalCount += $Elements.Longlength
 	$Result
 	if ($SkipGitDatabase -eq $true) {
-		$ElementsTotalCount -= $($(Get-ChildItem -Force -Name -Path .\.git -Recurse).Longlength + 1)
+		$script:ElementsTotalCount -= $($(Get-ChildItem -Force -Name -Path .\.git -Recurse).Longlength + 1)
 		$Result = $(clamscan --exclude=./.git --official-db-only=yes --recursive ./)
 	} else {
 		$Result = $(clamscan --official-db-only=yes --recursive ./)
 	}
 	if ($Result -match "found") {
-		$SetFail = $true
+		$script:SetFail = $true
 		Write-Output -InputObject "::error::Found virus!"
 	}
 	Write-Output -InputObject @"
