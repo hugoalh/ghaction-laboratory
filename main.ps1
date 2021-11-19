@@ -7,15 +7,15 @@ function Execute-Scan {
 		[Parameter()][switch]$SkipGitDatabase
 	)
 	Write-Output -InputObject "::group::Scan $Message."
-	$Elements = $(Get-ChildItem -Force -Name -Path .\ -Recurse)
-	Write-Output -InputObject "::debug::Directory elements ($($Elements.Length)):"
+	$Elements = $(Get-ChildItem -Force -Name -Path .\ -Recurse | Sort-Object)
+	Write-Output -InputObject "::debug::Directory elements ($($Elements.Longlength)):"
 	foreach ($Element in $Elements) {
 		Write-Output -InputObject "::debug::- $Element"
 	}
-	$ElementsTotalCount += $Elements.Length
+	$ElementsTotalCount += $Elements.Longlength
 	$Result
 	if ($SkipGitDatabase -eq $true) {
-		$ElementsTotalCount -= $($(Get-ChildItem -Force -Name -Path .\.git -Recurse).Length + 1)
+		$ElementsTotalCount -= $($(Get-ChildItem -Force -Name -Path .\.git -Recurse).Longlength + 1)
 		$Result = $(clamscan --exclude=./.git --official-db-only=yes --recursive ./)
 	} else {
 		$Result = $(clamscan --official-db-only=yes --recursive ./)
@@ -30,13 +30,19 @@ function Execute-Scan {
 Execute-Scan -Message "current workspace"
 if ($GitDepth -eq $true) {
 	if ($(Test-Path -Path .\.git) -eq $true) {
-		$Commits = $($(git --no-pager log --format=%H) -split "\r?\n")
+		$CommitsRaw = $(git --no-pager log --format=%H)
+		$Commits
+		if ($CommitsRaw -match "^[\da-f]{40}$") {
+			$Commits = @($CommitsRaw)
+		} else {
+			$Commits = $CommitsRaw
+		}
 		if ($Commits -ne $null) {
-			if ($Commits.Length -le 1) {
-				Write-Output -InputObject "::warning::Current Git repository has only $($Commits.Length) commits! If this is incorrect, please define ``actions/checkout`` input ``fetch-depth`` to ``0`` and re-run. (IMPORTANT: Press the ``Re-run all jobs`` or ``Re-run this workflow`` button cannot apply the modified workflow!)"
+			if ($Commits.Longlength -le 1) {
+				Write-Output -InputObject "::warning::Current Git repository has only $($Commits.Longlength) commits! If this is incorrect, please define ``actions/checkout`` input ``fetch-depth`` to ``0`` and re-run. (IMPORTANT: Press the ``Re-run all jobs`` or ``Re-run this workflow`` button cannot apply the modified workflow!)"
 			}
-			for ($CommitIndex = 0; $CommitIndex -lt $Commits.Length; $CommitIndex++) {
-				Write-Output -InputObject "Checkout commit #$($CommitIndex + 1)/$($Commits.Length): $($Commits[$CommitIndex])."
+			for ($CommitIndex = 0; $CommitIndex -lt $Commits.Longlength; $CommitIndex++) {
+				Write-Output -InputObject "Checkout commit #$($CommitIndex + 1)/$($Commits.Longlength): $($Commits[$CommitIndex])."
 				git checkout "$($Commits[$CommitIndex])"
 				Execute-Scan -Message "commit $($Commits[$CommitIndex])" -SkipGitDatabase
 			}
