@@ -16,9 +16,9 @@ function Execute-Scan {
 	$Result
 	if ($SkipGitDatabase -eq $true) {
 		$script:ElementsTotalCount -= $($(Get-ChildItem -Force -Name -Path .\.git -Recurse).Longlength + 1)
-		$Result = $(clamscan --exclude=./.git --official-db-only=yes --recursive ./)
+		$Result = $(clamscan --exclude=./.git --max-dir-recursion=4096 --max-files=40960 --max-filesize=4096M --max-recursion=4096 --max-scansize=4096M --official-db-only=yes --recursive ./)
 	} else {
-		$Result = $(clamscan --official-db-only=yes --recursive ./)
+		$Result = $(clamscan --max-dir-recursion=4096 --max-files=40960 --max-filesize=4096M --max-recursion=4096 --max-scansize=4096M --official-db-only=yes --recursive ./)
 	}
 	if ($Result -match "found") {
 		$script:SetFail = $true
