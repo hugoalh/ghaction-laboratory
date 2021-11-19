@@ -4,7 +4,7 @@ $SetError = $false
 function Execute-Scan {
 	param (
 		[Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true)][string]$Session,
-		[Parameter(Mandatory = $true, Position = 1, ValueFromPipeline = $true)][switch]$SkipGitDatabase
+		[Parameter()][switch]$SkipGitDatabase
 	)
 	$ElementsCount += $(Get-ChildItem -Force -Name -Path .\ -Recurse).Length
 	$Result
