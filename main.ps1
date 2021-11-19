@@ -1,6 +1,6 @@
 $GitDepth = [bool]::Parse($env:INPUT_GITDEPTH)
 $ElementsTotalCount = 0
-$SetError = $false
+$SetFail = $false
 function Execute-Scan {
 	param (
 		[Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true)][string]$Message,
@@ -21,48 +21,47 @@ function Execute-Scan {
 		$Result = $(clamscan --official-db-only=yes --recursive ./)
 	}
 	if ($Result -match "found") {
-		$SetError = $true
+		$SetFail = $true
 		Write-Output -InputObject "::error::Found virus!"
 	}
-	Write-Output -InputObject "::debug::$Result"
+	Write-Output -InputObject @"
+::debug::$Result
+"@
 	Write-Output -InputObject "::endgroup::"
 }
 Execute-Scan -Message "current workspace"
 if ($GitDepth -eq $true) {
-	if ($(Test-Path -Path .\.git) -eq $true) {
-		$CommitsRaw = $(git --no-pager log --format=%H)
+	$CommitsRaw = $(git --no-pager log --format=%H)
+	if (($(Test-Path -Path .\.git) -eq $true) -and ($CommitsRaw -notmatch "fatal") -and ($CommitsRaw -notmatch "error")) {
 		$Commits
 		if ($CommitsRaw -match "^[\da-f]{40}$") {
 			$Commits = @($CommitsRaw)
 		} else {
 			$Commits = $CommitsRaw
 		}
-		if ($Commits -ne $null) {
-			if ($Commits.Longlength -le 1) {
-				Write-Output -InputObject "::warning::Current Git repository has only $($Commits.Longlength) commits! If this is incorrect, please define ``actions/checkout`` input ``fetch-depth`` to ``0`` and re-run. (IMPORTANT: Press the ``Re-run all jobs`` or ``Re-run this workflow`` button cannot apply the modified workflow!)"
-			}
-			for ($CommitIndex = 0; $CommitIndex -lt $Commits.Longlength; $CommitIndex++) {
-				Write-Output -InputObject "Checkout commit #$($CommitIndex + 1)/$($Commits.Longlength): $($Commits[$CommitIndex])."
-				$Checkout = $(git checkout "$($Commits[$CommitIndex])" --quiet)
-				if ($Checkout -eq $null) {
-					$SetError = $true
-					Write-Output -InputObject @"
-::error::Commit #$($CommitIndex + 1)/$($Commits.Longlength) ($($Commits[$CommitIndex])) is not accessible or exist!
+		$CommitsLength = $Commits.Longlength
+		if ($CommitsLength -le 1) {
+			Write-Output -InputObject "::warning::Current Git repository has only $CommitsLength commits! If this is incorrect, please define ``actions/checkout`` input ``fetch-depth`` to ``0`` and re-run. (IMPORTANT: ``Re-run all jobs`` or ``Re-run this workflow`` cannot apply the modified workflow!)"
+		}
+		for ($CommitsIndex = 0; $CommitsIndex -lt $CommitsLength; $CommitsIndex++) {
+			$Commit = $Commits[$CommitsIndex]
+			Write-Output -InputObject "Checkout commit #$($CommitsIndex + 1)/$($CommitsLength): $Commit."
+			$Checkout = $(git checkout "$($Commits[$CommitsIndex])" --quiet)
+			if (($Checkout -eq $null) -and ($Checkout -notmatch "fatal") -and ($Checkout -notmatch "error")) {
+				Execute-Scan -Message "commit $($Commits[$CommitsIndex])" -SkipGitDatabase
+			} else {
+				$SetFail = $true
+				Write-Output -InputObject @"
+::error::Commit #$($CommitsIndex + 1)/$($CommitsLength) ($($Commits[$CommitsIndex])) is not accessible or exist!
 $Checkout
 "@
-				} else {
-					Execute-Scan -Message "commit $($Commits[$CommitIndex])" -SkipGitDatabase
-				}
 			}
-		} else {
-			$SetError = $true
-			Write-Output -InputObject "::error::Current workspace is not a valid Git repository!"
 		}
 	} else {
 		Write-Output -InputObject "::warning::Current workspace is not a Git repository!"
 	}
 }
 Write-Output -InputObject "Scanned elements total: $ElementsTotalCount"
-if ($SetError -eq $true) {
+if ($SetFail -eq $true) {
 	Exit 1
 }
