@@ -43,8 +43,16 @@ if ($GitDepth -eq $true) {
 			}
 			for ($CommitIndex = 0; $CommitIndex -lt $Commits.Longlength; $CommitIndex++) {
 				Write-Output -InputObject "Checkout commit #$($CommitIndex + 1)/$($Commits.Longlength): $($Commits[$CommitIndex])."
-				git checkout "$($Commits[$CommitIndex])"
-				Execute-Scan -Message "commit $($Commits[$CommitIndex])" -SkipGitDatabase
+				$Checkout = $(git checkout "$($Commits[$CommitIndex])" --quiet)
+				if ($Checkout -eq $null) {
+					$SetError = $true
+					Write-Output -InputObject @"
+::error::Commit #$($CommitIndex + 1)/$($Commits.Longlength) ($($Commits[$CommitIndex])) is not accessible or exist!
+$Checkout
+"@
+				} else {
+					Execute-Scan -Message "commit $($Commits[$CommitIndex])" -SkipGitDatabase
+				}
 			}
 		} else {
 			$SetError = $true
