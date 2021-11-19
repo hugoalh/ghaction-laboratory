@@ -1,6 +1,5 @@
 $Mode = ($env:INPUT_MODE).ToLower()
 Write-Output -InputObject $Mode
-git --no-pager fetch --quiet
 $CommitsRaw = $(git --no-pager log --format=%H)
 $Commits = [regex]::split($CommitsRaw, "\r?\n")
 Write-Output -InputObject $($Commits.Length)
