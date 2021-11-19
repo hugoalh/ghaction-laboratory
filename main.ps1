@@ -46,13 +46,13 @@ if ($GitDepth -eq $true) {
 		for ($CommitsIndex = 0; $CommitsIndex -lt $CommitsLength; $CommitsIndex++) {
 			$Commit = $Commits[$CommitsIndex]
 			Write-Output -InputObject "Checkout commit #$($CommitsIndex + 1)/$($CommitsLength): $Commit."
-			$Checkout = $(git checkout "$($Commits[$CommitsIndex])" --quiet)
+			$Checkout = $(git checkout "$Commit" --quiet)
 			if (($Checkout -eq $null) -and ($Checkout -notmatch "fatal") -and ($Checkout -notmatch "error")) {
-				Execute-Scan -Message "commit $($Commits[$CommitsIndex])" -SkipGitDatabase
+				Execute-Scan -Message "commit $Commit" -SkipGitDatabase
 			} else {
 				$SetFail = $true
 				Write-Output -InputObject @"
-::error::Commit #$($CommitsIndex + 1)/$($CommitsLength) ($($Commits[$CommitsIndex])) is not accessible or exist!
+::error::Commit #$($CommitsIndex + 1)/$($CommitsLength) ($Commit) is not accessible or exist!
 $Checkout
 "@
 			}
