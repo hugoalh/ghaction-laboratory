@@ -8,7 +8,7 @@ jobs:
     steps:
       - uses: "actions/checkout@v2.4.0"
         with:
-          fetch-depth: 0
+          fetch-depth: 1
       - uses: "hugoalh/ghaction-laboratory@main"
         with:
           gitdepth: true
