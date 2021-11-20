@@ -3,11 +3,10 @@ $SetFail = $false
 $TotalScanElements = 0
 function Execute-Scan {
 	param (
-		[Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true)][string]$SessionCapital,
-		[Parameter(Mandatory = $true, Position = 1, ValueFromPipeline = $true)][string]$SessionLower,
+		[Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true)][string]$Session,
 		[Parameter()][switch]$SkipGitDatabase
 	)
-	Write-Output -InputObject "::group::Scan $SessionLower."
+	Write-Output -InputObject "::group::Scan $Session."
 	$Elements = (Get-ChildItem -Force -Name -Path .\ -Recurse | Sort-Object)
 	$ElementsLength = $Elements.Longlength
 	$ElementsScanLength = 0
@@ -50,14 +49,18 @@ function Execute-Scan {
 		}
 	} else {
 		$script:SetFail = $true
-		Write-Output -InputObject "::error::Found virus in $SessionLower from ClamScan!"
+		if (($LASTEXITCODE -eq 1) -or (($ClamScanResult -join "; ") -match "found")) {
+			Write-Output -InputObject "::error::Found virus in $Session from ClamAV!"
+		} else {
+			Write-Output -InputObject "::error::Unexpected execute result #cs-r!"
+		}
 		foreach ($Line in $ClamScanResult) {
 			Write-Output -InputObject $Line
 		}
 	}
 	Write-Output -InputObject "::endgroup::"
 }
-Execute-Scan -SessionCapital "Current Workspace" -SessionLower "current workspace"
+Execute-Scan -Session "current workspace"
 if ($GitDepth -eq $true) {
 	if ($(Test-Path -Path .\.git) -eq $true) {
 		$GitCommitsRaw
@@ -89,7 +92,7 @@ if ($GitDepth -eq $true) {
 					Exit 1
 				}
 				if ($LASTEXITCODE -eq 0) {
-					Execute-Scan -SessionCapital "Commit $GitCommit" -SessionLower "commit $GitCommit" -SkipGitDatabase
+					Execute-Scan -Session "commit $GitCommit" -SkipGitDatabase
 				} else {
 					Write-Output -InputObject "::error::Unexpected execute result #gc-r (commit #$($GitCommitsIndex + 1)/$($GitCommitsLength) ($GitCommit)): $GitCheckoutResult!"
 				}
