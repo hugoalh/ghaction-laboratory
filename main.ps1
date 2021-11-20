@@ -1,14 +1,3 @@
-try {
-	apk add --update clamav-libunrar clamav-scanner freshclam git
-	freshclam
-} catch {
-	Write-Output -InputObject "::error::Unexpected setup error #su-e!"
-	Exit 1
-}
-if ($LASTEXITCODE -ne 0) {
-	Write-Output -InputObject "::error::Unexpected setup error #su-c!"
-	Exit 1
-}
 $GitDepth = [bool]::Parse($env:INPUT_GITDEPTH)
 $SetFail = $false
 $TotalScanElements = 0
