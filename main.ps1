@@ -83,15 +83,15 @@ if ($GitDepth -eq $true) {
 				Write-Output -InputObject "Checkout commit #$($GitCommitsIndex + 1)/$($GitCommitsLength) ($GitCommit)."
 				$GitCheckoutResult
 				try {
-					$GitCheckoutResult = $(git checkout "$Commit" --quiet)
+					$GitCheckoutResult = $(git checkout "$GitCommit" --quiet)
 				} catch {
-					Write-Output -InputObject "::error::Unexpected execute error #gc-e (commit #$($CommitsIndex + 1)/$($CommitsLength) ($Commit))!"
+					Write-Output -InputObject "::error::Unexpected execute error #gc-e (commit #$($GitCommitsIndex + 1)/$($GitCommitsLength) ($GitCommit))!"
 					Exit 1
 				}
 				if ($LASTEXITCODE -eq 0) {
-					Execute-Scan -SessionCapital "Commit $Commit" -SessionLower "commit $Commit" -SkipGitDatabase
+					Execute-Scan -SessionCapital "Commit $GitCommit" -SessionLower "commit $GitCommit" -SkipGitDatabase
 				} else {
-					Write-Output -InputObject "::error::Unexpected execute result #gc-r (commit #$($CommitsIndex + 1)/$($CommitsLength) ($Commit)): $GitCheckoutResult!"
+					Write-Output -InputObject "::error::Unexpected execute result #gc-r (commit #$($GitCommitsIndex + 1)/$($GitCommitsLength) ($GitCommit)): $GitCheckoutResult!"
 				}
 			}
 		} else {
