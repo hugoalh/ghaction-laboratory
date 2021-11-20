@@ -16,7 +16,7 @@ function Execute-Scan {
 	foreach ($Element in $Elements) {
 		if (($SkipGitDatabase -eq $true) -and (
 			($Element -match "^.git$") -or
-			($Element -match "^.git\\")
+			($Element -match "^.git(?:\/|\\)")
 		)) {
 			Write-Output -InputObject "::debug::[Skip] $Element"
 			$ElementsSkipLength += 1
