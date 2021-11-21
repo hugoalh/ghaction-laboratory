@@ -1,17 +1,18 @@
-$ClamDStartResult
+#	$ClamDStartResult
 try {
-	$ClamDStartResult = clamd
+	#	$ClamDStartResult = Start-Job -ScriptBlock { clamd }
+	Start-Job -ScriptBlock { clamd }
 } catch {
 	Write-Output -InputObject "::error::Unable to execute ClamD[Start]!"
 	Exit 1
 }
-if ($LASTEXITCODE -ne 0) {
-	Write-Output -InputObject "::error::Unexpected ClamD[Start] result {$LASTEXITCODE}: $ClamDStartResult"
-	Exit 1
-}
-foreach ($Line in $ClamDStartResult) {
-	Write-Output -InputObject "::debug::$Line"
-}
+#	if ($LASTEXITCODE -ne 0) {
+#		Write-Output -InputObject "::error::Unexpected ClamD[Start] result {$LASTEXITCODE}: $ClamDStartResult"
+#		Exit 1
+#	}
+#	foreach ($Line in $ClamDStartResult) {
+#		Write-Output -InputObject "::debug::$Line"
+#	}
 $GitDepth = [bool]::Parse($env:INPUT_GITDEPTH)
 $SetFail = $false
 $TotalScanElements = 0
@@ -29,7 +30,7 @@ function Execute-Scan {
 	$script:TotalScanElements += $ElementsLength
 	$ClamDScanResult
 	try {
-		$ClamDScanResult = $(clamdscan --fdpass --multiscan ./)
+		$ClamDScanResult = $(clamdscan --fdpass --multiscan)
 	} catch {
 		Write-Output -InputObject "::error::Unable to execute ClamDScan ($Session)!"
 		Write-Output -InputObject "::endgroup::"
@@ -44,7 +45,7 @@ function Execute-Scan {
 		if (($LASTEXITCODE -eq 1) -or (($ClamDScanResult -join "; ") -match "found")) {
 			Write-Output -InputObject "::error::Found virus in $Session from ClamAV:"
 		} else {
-			Write-Output -InputObject "::error::Unexpected ClamScan result ($Session){$LASTEXITCODE}:"
+			Write-Output -InputObject "::error::Unexpected ClamDScan result ($Session){$LASTEXITCODE}:"
 		}
 		foreach ($Line in $ClamDScanResult) {
 			Write-Output -InputObject $Line
@@ -84,7 +85,7 @@ if ($GitDepth -eq $true) {
 					Exit 1
 				}
 				if ($LASTEXITCODE -eq 0) {
-					Execute-Scan -Session "commit #$($GitCommitsIndex + 1)/$($GitCommitsLength) ($GitCommit)" -SkipGitDatabase
+					Execute-Scan -Session "commit #$($GitCommitsIndex + 1)/$($GitCommitsLength) ($GitCommit)"
 				} else {
 					Write-Output -InputObject "::error::Unexpected Git-Checkout result (commit #$($GitCommitsIndex + 1)/$($GitCommitsLength) ($GitCommit)){$LASTEXITCODE}: $GitCheckoutResult"
 				}
