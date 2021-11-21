@@ -1,18 +1,17 @@
-#	$ClamDStartResult
+$ClamDStartResult
 try {
-	#	$ClamDStartResult = Start-Job -ScriptBlock { clamd }
-	Start-Job -ScriptBlock { clamd }
+	$ClamDStartResult = clamd
 } catch {
 	Write-Output -InputObject "::error::Unable to execute ClamD[Start]!"
 	Exit 1
 }
-#	if ($LASTEXITCODE -ne 0) {
-#		Write-Output -InputObject "::error::Unexpected ClamD[Start] result {$LASTEXITCODE}: $ClamDStartResult"
-#		Exit 1
-#	}
-#	foreach ($Line in $ClamDStartResult) {
-#		Write-Output -InputObject "::debug::$Line"
-#	}
+if ($LASTEXITCODE -ne 0) {
+	Write-Output -InputObject "::error::Unexpected ClamD[Start] result {$LASTEXITCODE}: $ClamDStartResult"
+	Exit 1
+}
+foreach ($Line in $ClamDStartResult) {
+	Write-Output -InputObject "::debug::$Line"
+}
 $GitDepth = [bool]::Parse($env:INPUT_GITDEPTH)
 $SetFail = $false
 $TotalScanElements = 0
