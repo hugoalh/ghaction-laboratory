@@ -54,10 +54,10 @@ function Execute-Scan {
 	Write-Output -InputObject "::debug::Elements list ($Session - $ElementsLength):`n$($Elements -join "`n")"
 	$ElementsRaw = ""
 	foreach ($Element in $Elements) {
-		$ElementsRaw += "$($env:GITHUB_WORKSPACE)$($Element)`n"
+		$ElementsRaw += "$(Join-Path -Path $env:GITHUB_WORKSPACE -ChildPath $Element)`n"
 	}
 	Set-Content -Path $TemporaryFile -Value $ElementsRaw -Encoding utf8NoBOM
-	$script:TotalScanElements += $ElementsLength
+	$script:TotalScanElements += ($ElementsLength + 1)
 	$ClamDScanResult
 	try {
 		$ClamDScanResult = $(clamdscan --fdpass --file-list $TemporaryFile --multiscan) -join "`n"
