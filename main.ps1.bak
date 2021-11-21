@@ -6,47 +6,69 @@ try {
 	Exit 1
 }
 if ($LASTEXITCODE -ne 0) {
-	Write-Output -InputObject "::error::Unexpected ClamD[Start] result {$LASTEXITCODE}: $ClamDStartResult"
+	Write-Output -InputObject "::error::Unexpected ClamD[Start] result: $ClamDStartResult"
 	Exit 1
-}
-foreach ($Line in $ClamDStartResult) {
-	Write-Output -InputObject "::debug::$Line"
 }
 $GitDepth = [bool]::Parse($env:INPUT_GITDEPTH)
 $SetFail = $false
 $TotalScanElements = 0
 function Execute-Scan {
 	param (
-		[Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true)][string]$Session
+		[Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true)][string]$Session,
+		[Parameter()][switch]$SkipGitDatabase
 	)
 	Write-Output -InputObject "::group::Scan $Session."
 	$Elements = (Get-ChildItem -Force -Name -Path .\ -Recurse | Sort-Object)
 	$ElementsLength = $Elements.Longlength
+	$ElementsScanLength = 0
+	$ElementsSkipLength = 0
 	Write-Output -InputObject "::debug::Elements List ($ElementsLength):"
 	foreach ($Element in $Elements) {
-		Write-Output -InputObject "::debug::$($Element)"
+		if (($SkipGitDatabase -eq $true) -and (
+			($Element -match "^.git$") -or
+			($Element -match "^.git(?:\/|\\)")
+		)) {
+			Write-Output -InputObject "::debug::$($Element): WILL-SKIP"
+			$ElementsSkipLength += 1
+		} else {
+			Write-Output -InputObject "::debug::$($Element): WILL-SCAN"
+			$ElementsScanLength += 1
+		}
 	}
-	$script:TotalScanElements += $ElementsLength
-	$ClamDScanResult
-	try {
-		$ClamDScanResult = $(clamdscan --fdpass --multiscan ./)
-	} catch {
-		Write-Output -InputObject "::error::Unable to execute ClamDScan ($Session)!"
-		Write-Output -InputObject "::endgroup::"
-		Exit 1
-	}
-	if (($LASTEXITCODE -eq 0) -and (($ClamDScanResult -join "; ") -notmatch "found")) {
-		foreach ($Line in $ClamDScanResult) {
+	Write-Output -InputObject "::debug::Will scan elements: $ElementsScanLength/$ElementsLength"
+	Write-Output -InputObject "::debug::Will skip elements: $ElementsSkipLength/$ElementsLength"
+	$script:TotalScanElements += $ElementsScanLength
+	$ClamScanResult
+	#	if ($SkipGitDatabase -eq $true) {
+	#		try {
+	#			$ClamScanResult = $(clamscan --exclude=./.git --max-dir-recursion=4096 --max-files=40960 --max-filesize=4096M --max-recursion=4096 --max-scansize=4096M --official-db-only=yes --recursive ./)
+	#		} catch {
+	#			Write-Output -InputObject "::error::Unable to execute ClamScan[1]!"
+	#			Write-Output -InputObject "::endgroup::"
+	#			Exit 1
+	#		}
+	#	} else {
+		try {
+			#	$ClamScanResult = $(clamscan --max-dir-recursion=4096 --max-files=40960 --max-filesize=4096M --max-recursion=4096 --max-scansize=4096M --official-db-only=yes --recursive ./)
+			$ClamScanResult = $(clamdscan --fdpass --multiscan ./)
+		} catch {
+			Write-Output -InputObject "::error::Unable to execute ClamScan[0] ($Session)!"
+			Write-Output -InputObject "::endgroup::"
+			Exit 1
+		}
+	#	}
+	if (($LASTEXITCODE -eq 0) -and (($ClamScanResult -join "; ") -notmatch "found")) {
+		foreach ($Line in $ClamScanResult) {
 			Write-Output -InputObject "::debug::$Line"
 		}
 	} else {
 		$script:SetFail = $true
-		if (($LASTEXITCODE -eq 1) -or (($ClamDScanResult -join "; ") -match "found")) {
+		if (($LASTEXITCODE -eq 1) -or (($ClamScanResult -join "; ") -match "found")) {
 			Write-Output -InputObject "::error::Found virus in $Session from ClamAV:"
 		} else {
-			Write-Output -InputObject "::error::Unexpected ClamScan result ($Session){$LASTEXITCODE}:"
+			Write-Output -InputObject "::error::Unexpected ClamScan result ($Session):"
 		}
-		foreach ($Line in $ClamDScanResult) {
+		foreach ($Line in $ClamScanResult) {
 			Write-Output -InputObject $Line
 		}
 	}
@@ -86,11 +108,11 @@ if ($GitDepth -eq $true) {
 				if ($LASTEXITCODE -eq 0) {
 					Execute-Scan -Session "commit #$($GitCommitsIndex + 1)/$($GitCommitsLength) ($GitCommit)" -SkipGitDatabase
 				} else {
-					Write-Output -InputObject "::error::Unexpected Git-Checkout result (commit #$($GitCommitsIndex + 1)/$($GitCommitsLength) ($GitCommit)){$LASTEXITCODE}: $GitCheckoutResult"
+					Write-Output -InputObject "::error::Unexpected Git-Checkout result (commit #$($GitCommitsIndex + 1)/$($GitCommitsLength) ($GitCommit)): $GitCheckoutResult"
 				}
 			}
 		} else {
-			Write-Output -InputObject "::error::Unexpected Git-Log result {$LASTEXITCODE}: $GitCommitsRaw"
+			Write-Output -InputObject "::error::Unexpected Git-Log result: $GitCommitsRaw"
 		}
 	} else {
 		Write-Output -InputObject "::warning::Current workspace is not a Git repository!"
