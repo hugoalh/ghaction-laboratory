@@ -50,9 +50,9 @@ function Execute-Scan {
 	#	} else {
 		try {
 			#	$ClamScanResult = $(clamscan --max-dir-recursion=4096 --max-files=40960 --max-filesize=4096M --max-recursion=4096 --max-scansize=4096M --official-db-only=yes --recursive ./)
-			$ClamScanResult = $(clamdscan --exclude=./.git --fdpass --multiscan ./)
+			$ClamScanResult = $(clamdscan --fdpass --multiscan ./)
 		} catch {
-			Write-Output -InputObject "::error::Unable to execute ClamScan[0]!"
+			Write-Output -InputObject "::error::Unable to execute ClamScan[0] ($Session)!"
 			Write-Output -InputObject "::endgroup::"
 			Exit 1
 		}
@@ -66,7 +66,7 @@ function Execute-Scan {
 		if (($LASTEXITCODE -eq 1) -or (($ClamScanResult -join "; ") -match "found")) {
 			Write-Output -InputObject "::error::Found virus in $Session from ClamAV:"
 		} else {
-			Write-Output -InputObject "::error::Unexpected ClamScan result:"
+			Write-Output -InputObject "::error::Unexpected ClamScan result ($Session):"
 		}
 		foreach ($Line in $ClamScanResult) {
 			Write-Output -InputObject $Line
@@ -106,7 +106,7 @@ if ($GitDepth -eq $true) {
 					Exit 1
 				}
 				if ($LASTEXITCODE -eq 0) {
-					Execute-Scan -Session "commit $GitCommit" -SkipGitDatabase
+					Execute-Scan -Session "commit #$($GitCommitsIndex + 1)/$($GitCommitsLength) ($GitCommit)" -SkipGitDatabase
 				} else {
 					Write-Output -InputObject "::error::Unexpected Git-Checkout result (commit #$($GitCommitsIndex + 1)/$($GitCommitsLength) ($GitCommit)): $GitCheckoutResult"
 				}
