@@ -42,6 +42,7 @@ if ($LASTEXITCODE -ne 0) {
 Write-Output -InputObject "::debug::$ClamDStartResult"
 $GitDepth = [bool]::Parse($env:INPUT_GITDEPTH)
 $SetFail = $false
+$TemporaryFile = (New-TemporaryFile).FullName
 $TotalScanElements = 0
 function Execute-Scan {
 	param (
@@ -51,10 +52,15 @@ function Execute-Scan {
 	$Elements = (Get-ChildItem -Force -Name -Path .\ -Recurse | Sort-Object)
 	$ElementsLength = $Elements.Longlength
 	Write-Output -InputObject "::debug::Elements list ($Session - $ElementsLength):`n$($Elements -join "`n")"
+	$ElementsRaw = ""
+	foreach ($Element in $Elements) {
+		$ElementsRaw += "$($env:GITHUB_WORKSPACE)$($Element)`n"
+	}
+	Set-Content -Path $TemporaryFile -Value $ElementsRaw -Encoding utf8NoBOM
 	$script:TotalScanElements += $ElementsLength
 	$ClamDScanResult
 	try {
-		$ClamDScanResult = $(clamdscan --fdpass --multiscan) -join "`n"
+		$ClamDScanResult = $(clamdscan --fdpass --file-list $TemporaryFile --multiscan) -join "`n"
 	} catch {
 		Write-Output -InputObject "::error::Unable to execute ClamDScan ($Session)!"
 		Write-Output -InputObject "::endgroup::"
