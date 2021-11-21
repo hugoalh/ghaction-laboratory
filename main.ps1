@@ -54,7 +54,7 @@ function Execute-Scan {
 	$script:TotalScanElements += $ElementsLength
 	$ClamDScanResult
 	try {
-		$ClamDScanResult = $(clamdscan --fdpass --multiscan ./) -join "`n"
+		$ClamDScanResult = $(clamdscan --fdpass --multiscan $env:GITHUB_WORKSPACE) -join "`n"
 	} catch {
 		Write-Output -InputObject "::error::Unable to execute ClamDScan ($Session)!"
 		Write-Output -InputObject "::endgroup::"
