@@ -49,7 +49,7 @@ function Execute-Scan {
 		[Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true)][string]$Session
 	)
 	Write-Output -InputObject "::group::Scan $Session."
-	$Elements = (Get-ChildItem -Force -Name -Path .\ -Recurse | Sort-Object)
+	$Elements = (Get-ChildItem -Force -Name -Path $env:GITHUB_WORKSPACE -Recurse | Sort-Object)
 	$ElementsLength = $Elements.Longlength
 	Write-Output -InputObject "::debug::Elements list ($Session - $ElementsLength):`n$($Elements -join "`n")"
 	$ElementsRaw = ""
@@ -80,7 +80,7 @@ function Execute-Scan {
 }
 Execute-Scan -Session "current workspace"
 if ($GitDepth -eq $true) {
-	if ($(Test-Path -Path .\.git) -eq $true) {
+	if ($(Test-Path -Path $(Join-Path -Path $env:GITHUB_WORKSPACE -ChildPath ".git")) -eq $true) {
 		$GitCommitsRaw
 		try {
 			$GitCommitsRaw = $(git --no-pager log --all --format=%H --reflog --reverse) -join "`n"
