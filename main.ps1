@@ -1,5 +1,5 @@
-Write-Output -InputObject "Update ClamAV via FreshClam."
-$FreshClamResult
+Write-Output -InputObject "::group::Update ClamAV via FreshClam."
+$FreshClamResult = $null
 try {
 	$FreshClamResult = $(freshclam) -join "`n"
 } catch {
@@ -8,7 +8,7 @@ try {
 }
 if ($LASTEXITCODE -ne 0) {
 	$FreshClamErrorCode = $LASTEXITCODE
-	$FreshClamErrorMessage
+	$FreshClamErrorMessage = $null
 	switch ($FreshClamErrorCode) {
 		40 { $FreshClamErrorMessage = ": Unknown option passed" }
 		50 { $FreshClamErrorMessage = ": Cannot change directory" }
@@ -29,8 +29,9 @@ if ($LASTEXITCODE -ne 0) {
 	Exit 1
 }
 Write-Output -InputObject "::debug::$FreshClamResult"
-Write-Output -InputObject "Start ClamAV daemon."
-$ClamDStartResult
+Write-Output -InputObject "::endgroup::"
+Write-Output -InputObject "::group::Start ClamAV daemon."
+$ClamDStartResult = $null
 try {
 	$ClamDStartResult = $(clamd) -join "`n"
 } catch {
@@ -42,6 +43,7 @@ if ($LASTEXITCODE -ne 0) {
 	Exit 1
 }
 Write-Output -InputObject "::debug::$ClamDStartResult"
+Write-Output -InputObject "::endgroup::"
 $GitDepth = [bool]::Parse($env:INPUT_GITDEPTH)
 $SetFail = $false
 $TemporaryFile = (New-TemporaryFile).FullName
@@ -58,9 +60,9 @@ function Execute-Scan {
 	foreach ($Element in $Elements) {
 		$ElementsRaw += "$(Join-Path -Path $env:GITHUB_WORKSPACE -ChildPath $Element)`n"
 	}
-	Set-Content -Path $TemporaryFile -Value $ElementsRaw -Encoding utf8NoBOM
+	Set-Content -Encoding utf8NoBOM -NoNewLine -Path $TemporaryFile -Value $ElementsRaw
 	$script:TotalScanElements += ($ElementsLength + 1)
-	$ClamDScanResult
+	$ClamDScanResult = $null
 	try {
 		$ClamDScanResult = $(clamdscan --fdpass --file-list $TemporaryFile --multiscan) -join "`n"
 	} catch {
@@ -83,7 +85,7 @@ function Execute-Scan {
 Execute-Scan -Session "current workspace"
 if ($GitDepth -eq $true) {
 	if ($(Test-Path -Path $(Join-Path -Path $env:GITHUB_WORKSPACE -ChildPath ".git")) -eq $true) {
-		$GitCommitsRaw
+		$GitCommitsRaw = $null
 		try {
 			$GitCommitsRaw = $(git --no-pager log --all --format=%H --reflog --reverse) -join "`n"
 		} catch {
@@ -99,7 +101,7 @@ if ($GitDepth -eq $true) {
 			for ($GitCommitsIndex = 0; $GitCommitsIndex -lt $GitCommitsLength; $GitCommitsIndex++) {
 				$GitCommit = $GitCommits[$GitCommitsIndex]
 				Write-Output -InputObject "Checkout commit #$($GitCommitsIndex + 1)/$($GitCommitsLength) ($GitCommit)."
-				$GitCheckoutResult
+				$GitCheckoutResult = $null
 				try {
 					$GitCheckoutResult = $(git checkout "$GitCommit" --quiet) -join "`n"
 				} catch {
