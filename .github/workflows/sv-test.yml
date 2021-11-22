@@ -9,6 +9,8 @@ jobs:
       - uses: "actions/checkout@v2.4.0"
         with:
           fetch-depth: 0
+          repository: "fabrimagic72/malware-samples"
+          token: "${{secrets.READ_GITHUB}}"
       - uses: "hugoalh/ghaction-laboratory@main"
         with:
-          gitdepth: false
+          gitdepth: true
