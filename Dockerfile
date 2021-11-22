@@ -3,4 +3,6 @@ RUN ["apk", "add", "--update", "clamav", "clamav-clamdscan", "clamav-daemon", "c
 COPY clamd-minify.conf /etc/clamav/clamd.conf
 COPY freshclam-minify.conf /etc/clamav/freshclam.conf
 COPY main.ps1 /
+RUN ["chmod", "+rx", $GITHUB_WORKSPACE]
+RUN ["chmod", "+rx", "$GITHUB_WORKSPACE/"]
 CMD ["pwsh", "-NonInteractive", "/main.ps1"]

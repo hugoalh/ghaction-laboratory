@@ -1,3 +1,4 @@
+Write-Output -InputObject "Update ClamAV via FreshClam."
 $FreshClamResult
 try {
 	$FreshClamResult = $(freshclam) -join "`n"
@@ -9,34 +10,35 @@ if ($LASTEXITCODE -ne 0) {
 	$FreshClamErrorCode = $LASTEXITCODE
 	$FreshClamErrorMessage
 	switch ($FreshClamErrorCode) {
-		40 { $FreshClamErrorMessage = ": Unknown option passed." }
-		50 { $FreshClamErrorMessage = ": Cannot change directory." }
-		51 { $FreshClamErrorMessage = ": Cannot check MD5 sum." }
-		52 { $FreshClamErrorMessage = ": Connection (network) problem." }
-		53 { $FreshClamErrorMessage = ": Cannot unlink file." }
-		54 { $FreshClamErrorMessage = ": MD5 or digital signature verification error." }
-		55 { $FreshClamErrorMessage = ": Error reading file." }
-		56 { $FreshClamErrorMessage = ": Config file error." }
-		57 { $FreshClamErrorMessage = ": Cannot create new file." }
-		58 { $FreshClamErrorMessage = ": Cannot read database from remote server." }
-		59 { $FreshClamErrorMessage = ": Mirrors are not fully synchronized (try again later)." }
-		60 { $FreshClamErrorMessage = ": Cannot get information about user from /etc/passwd." }
-		61 { $FreshClamErrorMessage = ": Cannot drop privileges." }
-		62 { $FreshClamErrorMessage = ": Cannot initialize logger." }
+		40 { $FreshClamErrorMessage = ": Unknown option passed" }
+		50 { $FreshClamErrorMessage = ": Cannot change directory" }
+		51 { $FreshClamErrorMessage = ": Cannot check MD5 sum" }
+		52 { $FreshClamErrorMessage = ": Connection (network) problem" }
+		53 { $FreshClamErrorMessage = ": Cannot unlink file" }
+		54 { $FreshClamErrorMessage = ": MD5 or digital signature verification error" }
+		55 { $FreshClamErrorMessage = ": Error reading file" }
+		56 { $FreshClamErrorMessage = ": Config file error" }
+		57 { $FreshClamErrorMessage = ": Cannot create new file" }
+		58 { $FreshClamErrorMessage = ": Cannot read database from remote server" }
+		59 { $FreshClamErrorMessage = ": Mirrors are not fully synchronized (try again later)" }
+		60 { $FreshClamErrorMessage = ": Cannot get information about user from /etc/passwd" }
+		61 { $FreshClamErrorMessage = ": Cannot drop privileges" }
+		62 { $FreshClamErrorMessage = ": Cannot initialize logger" }
 	}
 	Write-Output -InputObject "::error::Unexpected FreshClam result {$($FreshClamErrorCode)$($FreshClamErrorMessage)}:`n$FreshClamResult"
 	Exit 1
 }
 Write-Output -InputObject "::debug::$FreshClamResult"
+Write-Output -InputObject "Start ClamAV daemon."
 $ClamDStartResult
 try {
 	$ClamDStartResult = $(clamd) -join "`n"
 } catch {
-	Write-Output -InputObject "::error::Unable to execute ClamD[Start]!"
+	Write-Output -InputObject "::error::Unable to execute ClamD!"
 	Exit 1
 }
 if ($LASTEXITCODE -ne 0) {
-	Write-Output -InputObject "::error::Unexpected ClamD[Start] result {$LASTEXITCODE}:`n$ClamDStartResult"
+	Write-Output -InputObject "::error::Unexpected ClamD result {$LASTEXITCODE}:`n$ClamDStartResult"
 	Exit 1
 }
 Write-Output -InputObject "::debug::$ClamDStartResult"
@@ -118,7 +120,9 @@ if ($GitDepth -eq $true) {
 	}
 }
 Write-Output -InputObject "Total scan elements: $TotalScanElements"
+Remove-Item -Path $TemporaryFile
 if ($SetFail -eq $true) {
 	Exit 1
 }
+Write-Output -InputObject "Stop ClamAV daemon."
 Exit 0
