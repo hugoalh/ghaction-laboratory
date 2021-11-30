@@ -1,3 +1,3 @@
-# hugoalh's GitHub Action Laboratory
+# hugoalh's GitHub Laboratory
 
-A laboratory to test GitHub Actions.
+A GitHub laboratory to test everything.
