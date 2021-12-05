@@ -1,0 +1,17 @@
+# $<Schema>$ https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions
+name: "SV"
+on:
+  workflow_dispatch:
+jobs:
+  depth:
+    name: "Depth Scan"
+    runs-on: "ubuntu-latest"
+    steps:
+      - name: "Checkout Repository"
+        uses: "actions/checkout@v2.4.0"
+        with:
+          fetch-depth: 0
+      - name: "Depth Scan Repository"
+        uses: "hugoalh/scan-virus-ghaction@main"
+        with:
+          gitdepth: "true"
