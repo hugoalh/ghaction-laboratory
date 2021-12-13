@@ -1,0 +1,16 @@
+# $<Schema>$ https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions
+name: "Discord"
+on:
+  workflow_dispatch:
+jobs:
+  discord:
+    name: "Discord"
+    runs-on: "ubuntu-latest"
+    steps:
+      - uses: "hugoalh/send-discord-webhook-ghaction@main"
+        with:
+          key: "${{secrets.DISCORDWEBHOOK_HUGOALHSTUDIO_TEST}}"
+          payload: |
+            {
+              "content": "Hello, world!"
+            }
