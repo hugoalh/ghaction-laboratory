@@ -7,7 +7,7 @@ jobs:
     name: "Discord"
     runs-on: "ubuntu-latest"
     steps:
-      - uses: "hugoalh/send-discord-webhook-ghaction@v4.1.0"
+      - uses: "hugoalh/send-discord-webhook-ghaction@main"
         with:
           key: "${{secrets.DISCORDWEBHOOK_HUGOALHSTUDIO_TEST}}"
           payload: |
