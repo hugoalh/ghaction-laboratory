@@ -13,7 +13,7 @@ jobs:
           node-version: 14
           check-latest: true
           registry-url: "https://registry.npmjs.org/"
-      - uses: "hugoalh/trigger-ifttt-webhook-applet-ghaction@main"
+      - uses: "hugoalh/trigger-ifttt-webhook-applet-ghaction/use-nodejs@main"
         with:
           eventname: "debug"
           key: "foobar"
