@@ -8,7 +8,18 @@ jobs:
     runs-on: "ubuntu-latest"
     steps:
       - run: |
-          $Message = [System.Web.HTTPUtility]::UrlEncode(@"
+          function Format-GHActionsEscapeCharacters {
+            [CmdletBinding()]
+            param(
+              [Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true)][AllowEmptyString()][string]$InputObject
+            )
+            begin {}
+            process {
+              return ($InputObject -replace '%', '%25' -replace "`n", '%0A' -replace "`r", '%0D' -replace ',', '%2C' -replace ':', '%3A' -replace ';', '%3B' -replace ']', '%5D')
+            }
+            end {}
+          }
+          $Message = @"
           不幸的是，這也不是很悲傷。骨灰盒的痛苦埃涅阿斯總是很容易。即使他沒有懷孕，也沒有被他的顧客懷孕。他總是希望孩子們放下電影。直到主要，愛神或租約，對貓來說似乎是一堆問題，是喝世界各地自由生活的悼詞。從甕甕據說是軟貓病，一床懷孕的時候，改善了鍋。就這樣青少年們開始了周末。但一個純足球教練的痛苦很容易。直到疼痛需要很多或青少年。Fusce fringilla rutrum libero eumalesuada。對於一個開始的地方，作者是生活中的資產。沒有辦法裝飾按鈕。悲傷地活著請選擇坐下來愛上一個貓髮型
 
           當然是一大堆痛苦的箭，還是大量的宣傳。有時飢餓和難以置信的飢餓在他面前，尤其是在喉嚨裡。痛苦本身就是愛，主要的存儲系統。在那之前，但門本身。前庭交流malesuada nibh。由於害怕標新立異，由於疼痛，害怕喝酒。除非有很多純雀，否則樂趣就完成了。整數blandit quam eget hendrerit sodales。我們為規劃而生，為入口的獲勝者和作者，為比拱門更多的球員，也為開大地的笑聲而生。但是渡輪在酒店裡，箭頭對準了。直到湖是明智的，而不是來自消費者的焦慮，箭不是免費的。直到今天下午。最後它只是巧克力。Cras volutpat mauris sed mi eleifend, et viverra massa facilisis。
@@ -18,6 +29,6 @@ jobs:
           Mauris rhoncus nisi坐在amet porttitor sodales。但是沙發，除非對愛欲之門有愛，否則就是生態。我們應該像巧克力一樣生活Cras lacinia venenatis sem, ac congue elit maximus venenatis。Pellentesquemalesuada augue恥辱，在山谷中的獅子熊一。直到我得到推動。在熊的臉上沒有任何毒床。這就是我希望我的孩子做的事情。但那張床需要巨大的經濟影響。湖人的生活。直到痛苦的代價不是免於犯罪，而是僱員的後院賠償。Aenean坐amet leo non sem vulputate consequat。痛苦不僅僅是貧窮。
 
           Curabitur ultrices odio a mattis dignissim。一如既往的弓在領的車輛，刑具的仇恨層的骨灰盒，誰放下了對精英的恐懼和仇恨。大地永遠在大地之中。電影的純粹粉絲，而不是作者和易，從骨灰盒中取出的車輛。總有時間想念一些純潔的愛。但少年與獅子喝酒，門放下弓拉根據需要從箭袋，主要仇恨處，橙色弓。活著就是停止生命的裙子。Mauris mollis在nisi eu dapibus直到那時，和自由的笑聲。成員們的笑聲，而不是複仇者的笑聲。類aptent taciti socialsqu ad litora Tornt per conubia nostra, per inceptos himenaeos獸人門口的入口處，第一層的哀慟呵護放下了床；不需要時不時地推進。
-          "@)
-          Write-Host -Object $Message
+          "@
+          Write-Host -Object "$(Format-GHActionsEscapeCharacters -InputObject $Message)"
         shell: "pwsh"
