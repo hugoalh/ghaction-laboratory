@@ -30,5 +30,5 @@ jobs:
 
           Curabitur ultrices odio a mattis dignissim。一如既往的弓在領的車輛，刑具的仇恨層的骨灰盒，誰放下了對精英的恐懼和仇恨。大地永遠在大地之中。電影的純粹粉絲，而不是作者和易，從骨灰盒中取出的車輛。總有時間想念一些純潔的愛。但少年與獅子喝酒，門放下弓拉根據需要從箭袋，主要仇恨處，橙色弓。活著就是停止生命的裙子。Mauris mollis在nisi eu dapibus直到那時，和自由的笑聲。成員們的笑聲，而不是複仇者的笑聲。類aptent taciti socialsqu ad litora Tornt per conubia nostra, per inceptos himenaeos獸人門口的入口處，第一層的哀慟呵護放下了床；不需要時不時地推進。
           "@
-          Write-Host -Object "$(Format-GHActionsEscapeCharacters -InputObject $Message)"
+          Write-Host -Object "::notice::$(Format-GHActionsEscapeCharacters -InputObject $Message)"
         shell: "pwsh"
