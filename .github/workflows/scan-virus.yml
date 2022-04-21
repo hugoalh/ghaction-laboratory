@@ -1,0 +1,11 @@
+# $<Schema>$ https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions
+name: "Scan Virus"
+on:
+  workflow_dispatch:
+jobs:
+  scan-virus:
+    name: "Scan Virus"
+    runs-on: "ubuntu-latest"
+    steps:
+      - name: "Scan Repository"
+        uses: "hugoalh/scan-virus-ghaction@main"
