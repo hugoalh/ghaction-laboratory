@@ -86,7 +86,9 @@ jobs:
           }
           Get-ChildItem -LiteralPath 'Env:\'
           '---'
-          Get-GitHubActionsInput -Name 'foo'
+          $Foo = Get-GitHubActionsInput -Name 'foo'
+          "Return: $Foo"
+          "Type: $($Foo.GetType())"
         env:
           INPUT_FOO: 'bar'
         shell: "pwsh"
