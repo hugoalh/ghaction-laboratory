@@ -87,6 +87,6 @@ jobs:
           Get-ChildItem -LiteralPath 'Env:\'
           '---'
           Get-GitHubActionsInput -Name 'foo'
-        with:
-          foo: 'bar'
+        env:
+          INPUT_FOO: 'bar'
         shell: "pwsh"
