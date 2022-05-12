@@ -1,0 +1,92 @@
+name: "Test"
+on:
+  workflow_dispatch:
+jobs:
+  test:
+    name: "Test"
+    runs-on: "ubuntu-latest"
+    steps:
+      - run: |
+          function Get-GitHubActionsInput {
+            [CmdletBinding(DefaultParameterSetName = 'one')]
+            [OutputType([string], ParameterSetName = 'one')]
+            [OutputType([hashtable], ParameterSetName = ('all', 'prefix', 'suffix'))]
+            param(
+              [Parameter(Mandatory = $true, ParameterSetName = 'one', Position = 0, ValueFromPipeline = $true)][ValidateScript({
+                return (($_ -match '^.+$') -and ([WildcardPattern]::ContainsWildcardCharacters($_) -eq $false))
+              })][Alias('Key')][string]$Name,
+              [Parameter(ParameterSetName = 'one')][Alias('Force', 'Forced', 'Required')][switch]$Require,
+              [Parameter(Mandatory = $true, ParameterSetName = 'prefix')][ValidateScript({
+                return (($_ -match '^.+$') -and ([WildcardPattern]::ContainsWildcardCharacters($_) -eq $false))
+              })][Alias('KeyPrefix', 'KeyStartWith', 'NameStartWith', 'Prefix', 'PrefixKey', 'PrefixName', 'StartWith', 'StartWithKey', 'StartWithName')][string]$NamePrefix,
+              [Parameter(Mandatory = $true, ParameterSetName = 'suffix')][ValidateScript({
+                return (($_ -match '^.+$') -and ([WildcardPattern]::ContainsWildcardCharacters($_) -eq $false))
+              })][Alias('EndWith', 'EndWithKey', 'EndWithName', 'KeyEndWith', 'KeySuffix', 'NameEndWith', 'Suffix', 'SuffixKey', 'SuffixName')][string]$NameSuffix,
+              [Parameter(ParameterSetName = 'all')][switch]$All,
+              [switch]$Trim
+            )
+            begin {
+              [hashtable]$OutputObject = @{}
+            }
+            process {
+              switch ($PSCmdlet.ParameterSetName) {
+                'all' {
+                  Get-ChildItem -Path 'Env:\INPUT_*' | ForEach-Object -Process {
+                    [string]$InputKey = $_.Name -replace '^INPUT_', ''
+                    if ($Trim) {
+                      $OutputObject[$InputKey] = $_.Value.Trim()
+                    } else {
+                      $OutputObject[$InputKey] = $_.Value
+                    }
+                  }
+                  break
+                }
+                'one' {
+                  $InputValue = Get-ChildItem -LiteralPath "Env:\INPUT_$Name" -ErrorAction 'SilentlyContinue'
+                  if ($null -eq $InputValue) {
+                    if ($Require) {
+                      return Write-GitHubActionsFail -Message "Input ``$Name`` is not defined!"
+                    }
+                    return $null
+                  }
+                  if ($Trim) {
+                    return $InputValue.Value.Trim()
+                  }
+                  return $InputValue.Value
+                }
+                'prefix' {
+                  Get-ChildItem -Path "Env:\INPUT_$NamePrefix*" | ForEach-Object -Process {
+                    [string]$InputKey = $_.Name -replace "^INPUT_$([regex]::Escape($NamePrefix))", ''
+                    if ($Trim) {
+                      $OutputObject[$InputKey] = $_.Value.Trim()
+                    } else {
+                      $OutputObject[$InputKey] = $_.Value
+                    }
+                  }
+                  break
+                }
+                'suffix' {
+                  Get-ChildItem -Path "Env:\INPUT_*$NameSuffix" | ForEach-Object -Process {
+                    [string]$InputKey = $_.Name -replace "^INPUT_|$([regex]::Escape($NameSuffix))$", ''
+                    if ($Trim) {
+                      $OutputObject[$InputKey] = $_.Value.Trim()
+                    } else {
+                      $OutputObject[$InputKey] = $_.Value
+                    }
+                  }
+                  break
+                }
+              }
+            }
+            end {
+              if ($PSCmdlet.ParameterSetName -in @('all', 'prefix', 'suffix')) {
+                return $OutputObject
+              }
+            }
+          }
+          Get-ChildItem -LiteralPath 'Env:\'
+          '---'
+          Get-GitHubActionsInput -Name 'foo'
+        with:
+          foo: 'bar'
+        shell: "pwsh"
