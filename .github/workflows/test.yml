@@ -42,7 +42,7 @@ jobs:
                   break
                 }
                 'one' {
-                  $InputValue = Get-ChildItem -LiteralPath "Env:\INPUT_$Name" -ErrorAction 'SilentlyContinue'
+                  $InputValue = Get-ChildItem -LiteralPath "Env:\INPUT_$($Name.ToUpper())" -ErrorAction 'SilentlyContinue'
                   if ($null -eq $InputValue) {
                     if ($Require) {
                       return Write-GitHubActionsFail -Message "Input ``$Name`` is not defined!"
