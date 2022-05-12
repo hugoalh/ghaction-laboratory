@@ -12,16 +12,10 @@ jobs:
             [OutputType([string], ParameterSetName = 'one')]
             [OutputType([hashtable], ParameterSetName = ('all', 'prefix', 'suffix'))]
             param(
-              [Parameter(Mandatory = $true, ParameterSetName = 'one', Position = 0, ValueFromPipeline = $true)][ValidateScript({
-                return (($_ -match '^.+$') -and ([WildcardPattern]::ContainsWildcardCharacters($_) -eq $false))
-              })][Alias('Key')][string]$Name,
+              [Parameter(Mandatory = $true, ParameterSetName = 'one', Position = 0, ValueFromPipeline = $true)][ValidatePattern('^(?:[\da-z][\da-z_-]*)?[\da-z]$')][Alias('Key')][string]$Name,
               [Parameter(ParameterSetName = 'one')][Alias('Force', 'Forced', 'Required')][switch]$Require,
-              [Parameter(Mandatory = $true, ParameterSetName = 'prefix')][ValidateScript({
-                return (($_ -match '^.+$') -and ([WildcardPattern]::ContainsWildcardCharacters($_) -eq $false))
-              })][Alias('KeyPrefix', 'KeyStartWith', 'NameStartWith', 'Prefix', 'PrefixKey', 'PrefixName', 'StartWith', 'StartWithKey', 'StartWithName')][string]$NamePrefix,
-              [Parameter(Mandatory = $true, ParameterSetName = 'suffix')][ValidateScript({
-                return (($_ -match '^.+$') -and ([WildcardPattern]::ContainsWildcardCharacters($_) -eq $false))
-              })][Alias('EndWith', 'EndWithKey', 'EndWithName', 'KeyEndWith', 'KeySuffix', 'NameEndWith', 'Suffix', 'SuffixKey', 'SuffixName')][string]$NameSuffix,
+              [Parameter(Mandatory = $true, ParameterSetName = 'prefix')][ValidatePattern('^[\da-z][\da-z_-]*$')][Alias('KeyPrefix', 'KeyStartWith', 'NameStartWith', 'Prefix', 'PrefixKey', 'PrefixName', 'StartWith', 'StartWithKey', 'StartWithName')][string]$NamePrefix,
+              [Parameter(Mandatory = $true, ParameterSetName = 'suffix')][ValidatePattern('^[\da-z_-]*[\da-z]$')][Alias('EndWith', 'EndWithKey', 'EndWithName', 'KeyEndWith', 'KeySuffix', 'NameEndWith', 'Suffix', 'SuffixKey', 'SuffixName')][string]$NameSuffix,
               [Parameter(ParameterSetName = 'all')][switch]$All,
               [switch]$Trim
             )
@@ -55,7 +49,7 @@ jobs:
                   return $InputValue.Value
                 }
                 'prefix' {
-                  Get-ChildItem -Path "Env:\INPUT_$NamePrefix*" | ForEach-Object -Process {
+                  Get-ChildItem -Path "Env:\INPUT_$($NamePrefix.ToUpper())*" | ForEach-Object -Process {
                     [string]$InputKey = $_.Name -replace "^INPUT_$([regex]::Escape($NamePrefix))", ''
                     if ($Trim) {
                       $OutputObject[$InputKey] = $_.Value.Trim()
@@ -66,7 +60,7 @@ jobs:
                   break
                 }
                 'suffix' {
-                  Get-ChildItem -Path "Env:\INPUT_*$NameSuffix" | ForEach-Object -Process {
+                  Get-ChildItem -Path "Env:\INPUT_*$($NameSuffix.ToUpper())" | ForEach-Object -Process {
                     [string]$InputKey = $_.Name -replace "^INPUT_|$([regex]::Escape($NameSuffix))$", ''
                     if ($Trim) {
                       $OutputObject[$InputKey] = $_.Value.Trim()
@@ -86,9 +80,9 @@ jobs:
           }
           Get-ChildItem -LiteralPath 'Env:\'
           '---'
-          $Foo = Get-GitHubActionsInput -Name 'foo'
-          "Return: $Foo"
-          "Type: $($Foo.GetType())"
+          "Foo: $(Get-GitHubActionsInput -Name 'foo')"
+          "Tar: $(Get-GitHubActionsInput -Name 'tar')"
         env:
           INPUT_FOO: 'bar'
+          INPUT_TAR: 'kdjfgrjkdgnjkdnbg'
         shell: "pwsh"
