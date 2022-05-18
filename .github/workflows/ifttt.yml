@@ -14,7 +14,6 @@ jobs:
             {
               "value1": "Hello, world!"
             }
-          dryrun: "true"
   nodejs:
     name: "NodeJS"
     runs-on: "ubuntu-latest"
@@ -27,7 +26,6 @@ jobs:
             {
               "value1": "Hello, world!"
             }
-          dryrun: "true"
   powershell:
     name: "PowerShell"
     runs-on: "ubuntu-latest"
@@ -40,4 +38,3 @@ jobs:
             {
               "value1": "Hello, world!"
             }
-          dryrun: "true"
