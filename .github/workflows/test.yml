@@ -7,7 +7,5 @@ jobs:
     runs-on: "ubuntu-latest"
     steps:
       - run: |
-          Add-Content -LiteralPath $env:GITHUB_ENV -Value 'FOO=bar' -Confirm:$false -Encoding 'UTF8NoBOM'
-          '-----'
-          Get-Content -LiteralPath $env:GITHUB_ENV -Raw -Encoding 'UTF8NoBOM'
+          Write-Host -Object "::notice title=Foo Bar::qwerty"
         shell: "pwsh"
