@@ -7,5 +7,5 @@ jobs:
     runs-on: "ubuntu-latest"
     steps:
       - run: |
-          Write-Host -Object "::notice title=Foo Bar::qwerty"
+          Write-Host -Object "::notice title=Foo=Bar::qwerty"
         shell: "pwsh"
