@@ -1,11 +1,25 @@
 name: "Test"
 on:
   workflow_dispatch:
+defaults:
+  run:
+    shell: "pwsh"
 jobs:
   test:
     name: "Test"
     runs-on: "ubuntu-latest"
     steps:
+      - id: "modify-powershell-repository"
+        run: |
+          Write-Host -Object "::set-output name=installation-policy::$((Get-PSRepository -Name 'PSGallery').InstallationPolicy)"
+          Set-PSRepository -Name 'PSGallery' -InstallationPolicy 'Trusted' -Verbose
       - run: |
-          Write-Host -Object "::notice title=Foo=Bar::qwerty"
-        shell: "pwsh"
+          Install-Module -Name 'PowerShellGet' -MinimumVersion '2.2.5' -Scope 'AllUsers' -AcceptLicense -Verbose
+      - run: |
+          Update-Module -Scope 'AllUsers' -AcceptLicense -Verbose
+      - run: |
+          Install-Module -Name 'hugoalh.GitHubActionsToolkit' -MinimumVersion '0.5.0' -Scope 'AllUsers' -AcceptLicense -Verbose
+      - run: |
+          Import-Module -Name 'hugoalh.GitHubActionsToolkit' -Scope 'Local'
+          Set-GitHubActionsOutput -Name 'foo' -Value "ooooo`nppppp"
+          Test-GitHubActionsNodeJsEnvironment
