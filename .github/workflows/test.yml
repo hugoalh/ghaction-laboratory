@@ -14,11 +14,11 @@ jobs:
           Write-Host -Object "::set-output name=installation-policy::$((Get-PSRepository -Name 'PSGallery').InstallationPolicy)"
           Set-PSRepository -Name 'PSGallery' -InstallationPolicy 'Trusted' -Verbose
       - run: |
-          Install-Module -Name 'PowerShellGet' -MinimumVersion '2.2.5' -Scope 'AllUsers' -AcceptLicense -Verbose
+          Install-Module -Name 'PowerShellGet' -MinimumVersion '2.2.5' -Scope 'AllUsers' -AcceptLicense -Confirm:$False -Verbose
       - run: |
-          Update-Module -Scope 'AllUsers' -AcceptLicense -Verbose
+          Update-Module -Scope 'AllUsers' -AcceptLicense -Confirm:$False -Verbose
       - run: |
-          Install-Module -Name 'hugoalh.GitHubActionsToolkit' -MinimumVersion '0.5.0' -Scope 'AllUsers' -AcceptLicense -Verbose
+          Install-Module -Name 'hugoalh.GitHubActionsToolkit' -MinimumVersion '0.5.0' -Scope 'CurrentUser' -AcceptLicense -Confirm:$False -Verbose
       - run: |
           Import-Module -Name 'hugoalh.GitHubActionsToolkit' -Scope 'Local'
           Set-GitHubActionsOutput -Name 'foo' -Value "ooooo`nppppp"
