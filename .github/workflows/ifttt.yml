@@ -11,9 +11,7 @@ jobs:
           eventname: "debug"
           key: "foobar"
           payload: |
-            {
-              "value1": "Hello, world!"
-            }
+            value1: "Hello, world!"
   nodejs:
     name: "NodeJS"
     runs-on: "ubuntu-latest"
