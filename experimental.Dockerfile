@@ -15,8 +15,5 @@ RUN ["pwsh", "-Command", "Set-PSRepository -Name 'PSGallery' -InstallationPolicy
 RUN ["pwsh", "-Command", "Install-Module -Name 'PowerShellGet' -MinimumVersion '2.2.5' -Scope 'AllUsers' -AcceptLicense -Verbose"]
 RUN ["pwsh", "-Command", "Update-Module -Scope 'AllUsers' -AcceptLicense -Verbose"]
 RUN ["pwsh", "-Command", "Install-Module -Name 'hugoalh.GitHubActionsToolkit' -MinimumVersion '0.5.2' -Scope 'AllUsers' -AcceptLicense -Verbose"]
-RUN ["clamconf", "--generate-config=freshclam.conf"]
-RUN ["clamconf", "--generate-config=clamd.conf"]
-RUN ["clamconf", "--generate-config=clamav-milter.conf"]
-COPY experimental.psm1 /opt/hugoalh/test/
+COPY experimental.ps1 /opt/hugoalh/test/
 CMD ["pwsh", "-NonInteractive", "/opt/hugoalh/test/experimental.ps1"]
