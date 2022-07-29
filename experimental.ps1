@@ -5,7 +5,9 @@ clamdscan --version
 clamscan --version
 freshclam --version
 git --version
+git-lfs --version
 node --version
-clamconf --generate-config=freshclam.conf
-clamconf --generate-config=clamd.conf
+yara --version
 clamconf --generate-config=clamav-milter.conf
+clamconf --generate-config=clamd.conf
+clamconf --generate-config=freshclam.conf
