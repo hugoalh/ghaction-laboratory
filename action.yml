@@ -1,9 +1,13 @@
-name: "Docker Matrix Image Build"
+name: "Test"
 author: "hugoalh"
-description: "N/A"
+description: "Test."
 runs:
-  using: "docker"
-  image: "experimental.Dockerfile"
+  using: "composite"
+  steps:
+    - name: "Execute Main Action"
+      run: |
+        ${{github.action_path}}/main.ps1
+      shell: "pwsh"
 branding:
-  icon: "alert-triangle"
+  icon: "activity"
   color: "red"
