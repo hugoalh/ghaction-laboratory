@@ -6,6 +6,5 @@ jobs:
     steps:
       - uses: "hugoalh/trigger-ifttt-webhook-applet-ghaction@main"
         with:
-          eventname: "maker_webhooks"
-          key: "${{secrets.TTTTT}}"
-          arbitrary: true
+          eventname: "test"
+          key: "${{secrets.IFTTT}}"
