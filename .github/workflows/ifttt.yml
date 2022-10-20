@@ -8,3 +8,4 @@ jobs:
         with:
           eventname: "maker_webhooks"
           key: "${{secrets.TTTTT}}"
+          arbitrary: true
