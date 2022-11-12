@@ -4,7 +4,7 @@ jobs:
   test:
     runs-on: "ubuntu-latest"
     steps:
-      - uses: "hugoalh/trigger-ifttt-webhook-applet-ghaction@main"
+      - uses: "hugoalh/trigger-ifttt-webhook-applet-ghaction@test/bundler/esbuild"
         with:
           eventname: "test"
           key: "${{secrets.IFTTT}}"
