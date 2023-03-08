@@ -4,7 +4,7 @@ jobs:
   test:
     runs-on: "ubuntu-latest"
     steps:
-      - uses: "hugoalh-studio/setup-powershell-toolkit-ghaction"
+      - uses: "hugoalh-studio/setup-powershell-toolkit-ghaction@main"
       - run: |
           Import-Module -Name 'hugoalh.GitHubActionsToolkit' -Scope 'Local'
           Write-GitHubActionsNotice -Message 'Test.'
