@@ -1,0 +1,11 @@
+on:
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: "ubuntu-latest"
+    steps:
+      - uses: "hugoalh-studio/setup-powershell-toolkit-ghaction@main"
+      - run: |
+          Import-Module -Name 'hugoalh.GitHubActionsToolkit' -Scope 'Local'
+          Get-GitHubActionsWebhookEventPayload
+        shell: "pwsh"
