@@ -16,5 +16,5 @@ jobs:
           toolkit_allowprerelease: "True"
       - run: |
           Import-Module -Name 'hugoalh.GitHubActionsToolkit' -Scope 'Local'
-          Restore-GitHubActionsCache -Key @('test') -LiteralPath $Env:GITHUB_WORKSPACE
+          Save-GitHubActionsCache -Key 'test' -LiteralPath '/home/runner/.local/share/powershell/Modules/'
         shell: "pwsh"
