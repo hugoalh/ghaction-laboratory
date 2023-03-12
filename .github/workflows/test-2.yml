@@ -12,7 +12,7 @@ jobs:
           registry-url: "https://registry.npmjs.org/"
       - uses: "hugoalh-studio/setup-powershell-toolkit-ghaction@main"
         with:
-          toolkit_version: "1.3.2-beta2"
+          toolkit_version: "1.3.2-beta3"
           toolkit_allowprerelease: "True"
       - run: |
           Import-Module -Name 'hugoalh.GitHubActionsToolkit' -Scope 'Local'
