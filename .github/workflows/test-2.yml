@@ -15,5 +15,7 @@ jobs:
           toolkit_version: "1.3.0"
       - run: |
           Import-Module -Name 'hugoalh.GitHubActionsToolkit' -Scope 'Local'
+          node --version
+          Test-GitHubActionsNodeJsEnvironment
           Restore-GitHubActionsCache -Key @('test') -LiteralPath $Env:GITHUB_WORKSPACE
         shell: "pwsh"
