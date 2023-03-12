@@ -5,6 +5,8 @@ jobs:
     runs-on: "ubuntu-latest"
     steps:
       - uses: "hugoalh-studio/setup-powershell-toolkit-ghaction@main"
+        with:
+          toolkit_setup: "False"
       - run: |
           Import-Module -Name 'hugoalh.GitHubActionsToolkit' -Scope 'Local'
           Get-GitHubActionsWebhookEventPayload
