@@ -6,7 +6,7 @@ jobs:
     steps:
       - uses: "hugoalh/send-discord-webhook-ghaction@bundler/ncc-minify"
         with:
-          key: "test/test"
+          key: "12345678/test"
           payload: |
             content: "Hello, world!"
             wait: true
