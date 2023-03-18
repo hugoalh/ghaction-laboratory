@@ -4,4 +4,4 @@ jobs:
   test:
     runs-on: "ubuntu-latest"
     steps:
-      - uses: "hugoalh/send-discord-webhook@bundler/ncc-minify"
+      - uses: "hugoalh/send-discord-webhook-ghaction@bundler/ncc-minify"
