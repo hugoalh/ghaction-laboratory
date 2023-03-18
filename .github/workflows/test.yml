@@ -9,4 +9,4 @@ jobs:
           key: "12345678/test"
           payload: |
             content: "Hello, world!"
-            wait: true
+          wait: true
