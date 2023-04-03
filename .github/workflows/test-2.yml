@@ -1,36 +1,18 @@
 on:
   workflow_dispatch:
+defaults:
+  run:
+    shell: "pwsh"
 jobs:
   test:
     runs-on: "ubuntu-latest"
     steps:
-      - name: "Setup NodeJS"
-        uses: "actions/setup-node@v3.6.0"
-        with:
-          node-version: "lts/*"
-          check-latest: true
-          registry-url: "https://registry.npmjs.org/"
       - uses: "hugoalh-studio/setup-powershell-toolkit-ghaction@main"
-        with:
-          toolkit_version: "1.4.0-beta1"
-          toolkit_allowprerelease: "True"
-      - run: |
+      - id: "foobar"
+        run: |
           Import-Module -Name 'hugoalh.GitHubActionsToolkit' -Scope 'Local'
-          Test-GitHubActionsEnvironment
-          Get-GitHubActionsWebhookEventPayload
-          Set-GitHubActionsOutput -Name 'stdout' -Value 'Hello, world!'
-          Set-GitHubActionsOutput -Name 'foo' -Value @'
-          Dolores tempor nonumy aliquip suscipit ea sea justo dolor rebum stet velit consetetur sit ipsum amet clita magna eos.
-          Ipsum elitr dolor dolor.
-          Amet ea sea stet consequat sea duis stet eos dolor eleifend ipsum eum ipsum.
-          At erat nostrud clita dolor minim dolore dolor invidunt velit feugiat odio.
-          Minim sit at invidunt sed sit augue sit labore aliquyam minim liber illum.
-          Accusam lorem sit duo sit erat dolore stet minim.
-          Et sit wisi clita dolores accusam sit diam accusam sea aliquam lorem eos enim.
-          Elitr tation ut minim dolores dolor takimata clita nonumy clita sadipscing labore duo consetetur.
-          Duo amet eos doming sit sed aliquip aliquip wisi rebum sadipscing euismod labore.
-          Sea amet dolore eos kasd aliquyam ipsum sit wisi eirmod sit.
-          Eirmod facilisis duo vero esse.
-          Erat clita diam et dolore doming justo ea sed sanctus dolor labore eos in dolor ipsum aliquyam kasd kasd.
-          '@
-        shell: "pwsh"
+          Set-GitHubActionsOutput -Name 'out' -Value 'Hello, world!'
+          Set-GitHubActionsOutput -Name 'out' -Value 'Hello, world! This is a longer output.'
+          Set-GitHubActionsOutput -Name 'out' -Value 'Hi!'
+      - run: |
+          Write-Host -Object '${{steps.foobar.outputs.out}}'
