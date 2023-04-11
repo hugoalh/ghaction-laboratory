@@ -1,9 +1,0 @@
-name: "Docker Test"
-author: "hugoalh"
-description: "Docker test."
-runs:
-  using: "docker"
-  image: "Dockerfile"
-  pre-entrypoint: "/opt/hugoalh/test/pre.js"
-  entrypoint: "/opt/hugoalh/test/main.js"
-  post-entrypoint: "/opt/hugoalh/test/post.js"

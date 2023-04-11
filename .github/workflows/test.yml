@@ -1,7 +1,18 @@
 on:
   workflow_dispatch:
+defaults:
+  run:
+    shell: "pwsh"
 jobs:
   test:
     runs-on: "ubuntu-latest"
     steps:
-      - uses: "hugoalh/test@main"
+      - uses: "denoland/setup-deno@v1.1.1"
+      - run: |
+          deno cache https://raw.githubusercontent.com/hugoalh-studio/advanced-determine-nodejs/main/mod.ts
+          [String]$DenoDir = (
+            deno info --json |
+              Join-String -Separator "`n" |
+              ConvertFrom-Json -Depth 100
+          ).denoDir
+          Get-ChildItem -LiteralPath $DenoDir -Recurse -Name
