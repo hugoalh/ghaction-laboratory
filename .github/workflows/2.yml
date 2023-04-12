@@ -8,6 +8,10 @@ jobs:
     runs-on: "ubuntu-latest"
     steps:
       - uses: "hugoalh-studio/setup-powershell-toolkit-ghaction@main"
+      - uses: "hugoalh-studio/setup-powershell-toolkit-ghaction@main"
+      - uses: "hugoalh-studio/setup-powershell-toolkit-ghaction@main"
+      - uses: "hugoalh-studio/setup-powershell-toolkit-ghaction@main"
+      - uses: "hugoalh-studio/setup-powershell-toolkit-ghaction@main"
       - id: "foobar"
         run: |
           Import-Module -Name 'hugoalh.GitHubActionsToolkit' -Scope 'Local'
