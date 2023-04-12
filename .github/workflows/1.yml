@@ -9,7 +9,7 @@ jobs:
     steps:
       - uses: "denoland/setup-deno@v1.1.1"
       - run: |
-          deno cache https://raw.githubusercontent.com/hugoalh-studio/advanced-determine-nodejs/main/mod.ts
+          deno cache https://raw.githubusercontent.com/hugoalh-studio/advanced-determine-nodejs/main/deno/mod.ts
           [String]$DenoDir = (
             deno info --json |
               Join-String -Separator "`n" |
