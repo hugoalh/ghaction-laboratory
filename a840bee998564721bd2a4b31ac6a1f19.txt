@@ -1,4 +1,8 @@
-Hello, world! This is a sample file to show the issues of the code view on GitHub website! And this line is loooooooooooooooooooonger and loooooooooooooooooooonger and loooooooooooooooooooonger and loooooooooooooooooooonger and loooooooooooooooooooonger and loooooooooooooooooooonger and loooooooooooooooooooonger and loooooooooooooooooooonger than usual on purpose.
+Hello, world!
+
+This is a sample file to show the issues of the code view on GitHub website!
+
+And this file contains more break lines than usual on purpose.
 
 To show the issue as same as possible, please enable these view options:
 
