@@ -8,15 +8,6 @@ jobs:
     runs-on: "ubuntu-latest"
     steps:
       - uses: "hugoalh-studio/setup-powershell-toolkit-ghaction@main"
-      - uses: "hugoalh-studio/setup-powershell-toolkit-ghaction@main"
-      - uses: "hugoalh-studio/setup-powershell-toolkit-ghaction@main"
-      - uses: "hugoalh-studio/setup-powershell-toolkit-ghaction@main"
-      - uses: "hugoalh-studio/setup-powershell-toolkit-ghaction@main"
-      - id: "foobar"
-        run: |
-          Import-Module -Name 'hugoalh.GitHubActionsToolkit' -Scope 'Local'
-          Set-GitHubActionsOutput -Name 'out' -Value 'Hello, world!'
-          Set-GitHubActionsOutput -Name 'out' -Value 'Hello, world! This is a longer output.'
-          Set-GitHubActionsOutput -Name 'out' -Value 'Hi!'
       - run: |
-          Write-Host -Object '${{steps.foobar.outputs.out}}'
+          Import-Module -Name 'hugoalh.GitHubActionsToolkit' -Scope 'Local'
+          Write-GitHubActionsError -Message ('1--------10--------20--------30--------40--------50--------60--------70--------80--------90--------100' + ('-------10--------20--------30--------40--------50--------60--------70--------80--------90--------100' * 4000))
