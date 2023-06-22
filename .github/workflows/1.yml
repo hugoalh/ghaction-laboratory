@@ -12,7 +12,7 @@ jobs:
           [String]$FilePath = Join-Path -Path $Env:RUNNER_TEMP -ChildPath 'qwerty.ts'
           Set-Content -LiteralPath $FilePath -Value @'
           console.log(Deno.env.get("GITHUB_WORKSPACE"));
-          const kv = await Deno.openKv(Deno.env.get("GITHUB_WORKSPACE"));
+          const kv = await Deno.openKv(`${Deno.env.get("GITHUB_WORKSPACE")}/foobar`);
           await kv.set(["users", "alice"], { name: "Alice" });
           const res = await kv.get(["users", "alice"]);
           console.log(res.key);
