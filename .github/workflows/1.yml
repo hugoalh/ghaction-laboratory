@@ -7,12 +7,10 @@ jobs:
   test:
     runs-on: "ubuntu-latest"
     steps:
-      - uses: "denoland/setup-deno@v1.1.1"
+      - uses: "denoland/setup-deno@v1.1.2"
       - run: |
-          deno cache https://raw.githubusercontent.com/hugoalh-studio/advanced-determine-nodejs/main/deno/mod.ts
-          [String]$DenoDir = (
-            deno info --json |
-              Join-String -Separator "`n" |
-              ConvertFrom-Json -Depth 100
-          ).denoDir
-          Get-ChildItem -LiteralPath $DenoDir -Recurse -Name
+          echo "const kv = await Deno.openKv(Deno.env.get("GITHUB_WORKSPACE")); await kv.set(["users", "alice"], { name: "Alice" }); const res = await kv.get(["users", "alice"]); console.log(res.key); console.log(res.value);" > "$RUNNER_TEMP/qwerty.ts"
+          deno run --allow-all "$RUNNER_TEMP/qwerty.ts"
+      - uses: "actions/upload-artifact@v3.1.2"
+        with:
+          path: "${{github.workspace}}"
