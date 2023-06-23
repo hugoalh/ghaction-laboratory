@@ -10,4 +10,4 @@ jobs:
       - uses: "hugoalh-studio/setup-powershell-toolkit-ghaction@main"
       - run: |
           Import-Module -Name 'hugoalh.GitHubActionsToolkit' -Scope 'Local'
-          Write-GitHubActionsError -Message ('---------+' * [UInt16]::MaxValue)
+          Write-GitHubActionsError -Message 'Test' -Title 'Foo'
