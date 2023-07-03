@@ -13,10 +13,4 @@ jobs:
           toolkit_allowprerelease: "True"
       - run: |
           Import-Module -Name 'hugoalh.GitHubActionsToolkit' -Scope 'Local'
-          Write-GitHubActionsNotice -Message 'Hello, world!'
-          @"
-          Foo
-
-          Bar
-          "@ |
-            Write-GitHubActionsDebug
+          Get-GitHubActionsIsDebug
