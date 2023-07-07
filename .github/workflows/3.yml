@@ -6,4 +6,4 @@ jobs:
     steps:
       - run: |
           sudo --non-interactive --preserve-env apt list --installed
-          sudo --non-interactive --preserve-env pwsh -NonInteractive -Command "Get-ChildItem -LiteralPath @('/opt', '/usr/bin', '/usr/sbin', '/usr/local/bin', '/usr/local/sbin') -Force | Format-Table -Property @('User', 'Group', 'Name', 'PSIsContainer') -AutoSize"
+          sudo --non-interactive --preserve-env pwsh -NonInteractive -Command "Get-ChildItem -LiteralPath @('/opt', '/usr/bin', '/usr/sbin', '/usr/local/bin', '/usr/local/sbin') -Force | Format-Table -Property @('User', 'Group', 'Name', 'PSIsContainer') -GroupBy 'Directory' -AutoSize"
