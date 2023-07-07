@@ -1,0 +1,9 @@
+on:
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: "ubuntu-latest"
+    steps:
+      - run: |
+          sudo --non-interactive --preserve-env apt list --installed
+          sudo --non-interactive --preserve-env pwsh -NonInteractive -Command "Get-ChildItem -LiteralPath @('/opt', '/usr/bin', '/usr/sbin', '/usr/local/bin', '/usr/local/sbin')"

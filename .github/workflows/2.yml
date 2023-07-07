@@ -9,43 +9,7 @@ jobs:
     steps:
       - uses: "hugoalh-studio/setup-powershell-toolkit-ghaction@main"
         with:
-          toolkit_version: "1.6.0-beta1"
-          toolkit_allowprerelease: "True"
-      - uses: "hugoalh-studio/setup-powershell-toolkit-ghaction@main"
-        with:
-          toolkit_version: "1.6.0-beta1"
-          toolkit_allowprerelease: "True"
-      - uses: "hugoalh-studio/setup-powershell-toolkit-ghaction@main"
-        with:
-          toolkit_version: "1.6.0-beta1"
-          toolkit_allowprerelease: "True"
-      - uses: "hugoalh-studio/setup-powershell-toolkit-ghaction@main"
-        with:
-          toolkit_version: "1.6.0-beta1"
-          toolkit_allowprerelease: "True"
-      - uses: "hugoalh-studio/setup-powershell-toolkit-ghaction@main"
-        with:
-          toolkit_version: "1.6.0-beta1"
-          toolkit_allowprerelease: "True"
-      - uses: "hugoalh-studio/setup-powershell-toolkit-ghaction@main"
-        with:
-          toolkit_version: "1.6.0-beta1"
-          toolkit_allowprerelease: "True"
-      - uses: "hugoalh-studio/setup-powershell-toolkit-ghaction@main"
-        with:
-          toolkit_version: "1.6.0-beta1"
-          toolkit_allowprerelease: "True"
-      - uses: "hugoalh-studio/setup-powershell-toolkit-ghaction@main"
-        with:
-          toolkit_version: "1.6.0-beta1"
-          toolkit_allowprerelease: "True"
-      - uses: "hugoalh-studio/setup-powershell-toolkit-ghaction@main"
-        with:
-          toolkit_version: "1.6.0-beta1"
-          toolkit_allowprerelease: "True"
-      - uses: "hugoalh-studio/setup-powershell-toolkit-ghaction@main"
-        with:
-          toolkit_version: "1.6.0-beta1"
+          toolkit_version: "1.6.0-beta4"
           toolkit_allowprerelease: "True"
       - run: |
           Import-Module -Name 'hugoalh.GitHubActionsToolkit' -Scope 'Local'
