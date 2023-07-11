@@ -8,9 +8,9 @@ jobs:
     runs-on: "ubuntu-latest"
     steps:
       - uses: "hugoalh-studio/setup-powershell-toolkit-ghaction@main"
+      - uses: "hugoalh-studio/setup-powershell-toolkit-ghaction@main"
         with:
-          toolkit_version: "1.6.0-beta4"
-          toolkit_allowprerelease: "True"
+          toolkit_version: "Latest"
       - run: |
           Import-Module -Name 'hugoalh.GitHubActionsToolkit' -Scope 'Local'
           Get-GitHubActionsIsDebug
