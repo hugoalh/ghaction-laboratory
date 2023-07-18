@@ -9,9 +9,9 @@ jobs:
             ForEach-Object -Process {
               [String]$EnvPath = Get-Content -Path "Env:\$_"
               Write-Host -Object @"
-              $($_): 
-                $(Test-Path -LiteralPath $EnvPath)
-                $(Get-ChildItem -LiteralPath $EnvPath -Recurse -Force | Measure-Object -Property 'Length' -Sum | Select-Object -ExpandProperty 'Length')
-              "@
+          $($_): 
+            $(Test-Path -LiteralPath $EnvPath)
+            $(Get-ChildItem -LiteralPath $EnvPath -Recurse -Force | Measure-Object -Property 'Length' -Sum | Select-Object -ExpandProperty 'Length')
+          "@
             }
         shell: "pwsh"
