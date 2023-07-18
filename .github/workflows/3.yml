@@ -5,5 +5,8 @@ jobs:
     runs-on: "ubuntu-latest"
     steps:
       - run: |
-          sudo --non-interactive --preserve-env apt list --installed
-          sudo --non-interactive --preserve-env pwsh -NonInteractive -Command "Get-ChildItem -LiteralPath @('/opt', '/usr/bin', '/usr/sbin', '/usr/local/bin', '/usr/local/sbin') -Force | Format-Table -Property @('User', 'Group', 'PSIsContainer', 'FullName') -AutoSize -Wrap"
+          @('GITHUB_ENV', 'GITHUB_EVENT_PATH', 'GITHUB_OUTPUT', 'GITHUB_PATH', 'GITHUB_STATE', 'GITHUB_STEP_SUMMARY', 'GITHUB_WORKSPACE') |
+            ForEach-Object -Process {
+              Write-Host -Object "$($_): $(Test-Path -LiteralPath (Get-Content -Path "Env:\$($_)"))"
+            }
+        shell: "pwsh"
