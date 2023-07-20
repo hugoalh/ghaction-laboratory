@@ -6,7 +6,7 @@ runs:
   steps:
     - uses: "hugoalh-studio/setup-powershell-toolkit-ghaction@main"
       with:
-        version: "1.7.0-beta1"
+        version: "1.7.0-beta2"
         allowprerelease: "True"
     - run: |
         Import-Module -Name 'hugoalh.GitHubActionsToolkit' -Scope 'Local'
