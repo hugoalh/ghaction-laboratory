@@ -9,12 +9,14 @@ jobs:
     steps:
       - uses: "hugoalh-studio/setup-powershell-toolkit-ghaction@main"
         with:
-          version: "~1.5.0"
-      - uses: "hugoalh-studio/setup-powershell-toolkit-ghaction@main"
-        with:
-          version: "^1.5.0"
-      - uses: "hugoalh-studio/setup-powershell-toolkit-ghaction@main"
+          version: "1.7.0-beta1"
+          allowprerelease: "True"
       - run: |
           Import-Module -Name 'hugoalh.GitHubActionsToolkit' -Scope 'Local'
-          Get-GitHubActionsIsDebug
+          Invoke-GitHubActionsNodeJsWrapper -Name '$success' -Argument @{
+            'message' = 'Success'
+          }
+          Invoke-GitHubActionsNodeJsWrapper -Name '$fail' -Argument @{
+            'message' = 'Fail'
+          }
           $Env:RUNNER_DEBUG -iin @('1', 'True')
