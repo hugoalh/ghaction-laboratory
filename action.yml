@@ -1,0 +1,29 @@
+name: "Test"
+author: "hugoalh"
+description: "Test."
+runs:
+  using: "composite"
+  steps:
+    - uses: "hugoalh-studio/setup-powershell-toolkit-ghaction@main"
+      with:
+        version: "1.7.0-beta1"
+        allowprerelease: "True"
+    - run: |
+        Import-Module -Name 'hugoalh.GitHubActionsToolkit' -Scope 'Local'
+        Invoke-GitHubActionsNodeJsWrapper -Name '$success' -Argument @{
+          'message' = 'Success'
+        }
+        Invoke-GitHubActionsNodeJsWrapper -Name '$fail' -Argument @{
+          'message' = 'Fail'
+        } -ErrorAction 'Continue'
+        [String]$FilePath = Join-Path -Path $Env:GITHUB_WORKSPACE -ChildPath 'test.txt'
+        If (Restore-GitHubActionsCache -Key @('test') -LiteralPath @($Env:GITHUB_WORKSPACE)) {
+          Get-Content -LiteralPath $FilePath -Encoding 'UTF8NoBOM'
+        }
+        Set-Content -LiteralPath $FilePath -Value (New-Guid).Guid -PassThru -Force -Confirm:$False -Encoding 'UTF8NoBOM'
+        Save-GitHubActionsCache -Key 'test' -LiteralPath @($Env:GITHUB_WORKSPACE)
+        Export-GitHubActionsArtifact -Name 'test' -LiteralPath @($Env:GITHUB_WORKSPACE)
+      shell: "pwsh"
+branding:
+  icon: "package"
+  color: "gray-dark"

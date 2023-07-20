@@ -7,16 +7,4 @@ jobs:
   test:
     runs-on: "ubuntu-latest"
     steps:
-      - uses: "hugoalh-studio/setup-powershell-toolkit-ghaction@main"
-        with:
-          version: "1.7.0-beta1"
-          allowprerelease: "True"
-      - run: |
-          Import-Module -Name 'hugoalh.GitHubActionsToolkit' -Scope 'Local'
-          Invoke-GitHubActionsNodeJsWrapper -Name '$success' -Argument @{
-            'message' = 'Success'
-          }
-          Invoke-GitHubActionsNodeJsWrapper -Name '$fail' -Argument @{
-            'message' = 'Fail'
-          }
-          $Env:RUNNER_DEBUG -iin @('1', 'True')
+      - uses: "hugoalh/test@main"
