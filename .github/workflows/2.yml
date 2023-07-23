@@ -9,12 +9,7 @@ jobs:
     steps:
       - uses: "hugoalh-studio/setup-powershell-toolkit-ghaction@main"
         with:
-          version: "~1.5.0"
-      - uses: "hugoalh-studio/setup-powershell-toolkit-ghaction@main"
-        with:
-          version: "^1.5.0"
-      - uses: "hugoalh-studio/setup-powershell-toolkit-ghaction@main"
+          version: "1.0.69"
       - run: |
           Import-Module -Name 'hugoalh.GitHubActionsToolkit' -Scope 'Local'
           Get-GitHubActionsIsDebug
-          $Env:RUNNER_DEBUG -iin @('1', 'True')
