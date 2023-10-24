@@ -5,20 +5,7 @@ jobs:
     runs-on: "ubuntu-latest"
     steps:
       - run: |
-          @(
-            'GITHUB_ENV',
-            'GITHUB_EVENT_PATH',
-            'GITHUB_OUTPUT',
-            'GITHUB_PATH',
-            'GITHUB_STATE',
-            'GITHUB_STEP_SUMMARY'
-          ) |
-            ForEach-Object -Process {
-              [String]$EnvPath = Get-Content -Path "Env:\$_"
-              Write-Host -Object @"
-          $($_): 
-            $(Test-Path -LiteralPath $EnvPath)
-            $(Get-ChildItem -LiteralPath $EnvPath -Recurse -Force | Measure-Object -Property 'Length' -Sum | Select-Object -ExpandProperty 'Sum')
-          "@
-            }
+          Write-Host -Object '::group::'
+          Write-Host -Object 'foo bar'
+          Write-Host -Object '::endgroup::'
         shell: "pwsh"
