@@ -8,8 +8,6 @@ jobs:
     runs-on: "ubuntu-latest"
     steps:
       - uses: "hugoalh-studio/setup-powershell-toolkit-ghaction@main"
-        with:
-          allowprerelease: "True"
       - run: |
           Import-Module -Name 'hugoalh.GitHubActionsToolkit\module\internal\new-random-token.psm1' -Scope 'Local'
           New-RandomToken
