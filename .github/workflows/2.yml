@@ -11,5 +11,5 @@ jobs:
         with:
           allowprerelease: "True"
       - run: |
-          Import-Module -Name 'hugoalh.GitHubActionsToolkit' -Scope 'Local'
-          Test-GitHubActionsEnvironment
+          Import-Module -Name 'hugoalh.GitHubActionsToolkit\module\internal\new-random-token.psm1' -Scope 'Local'
+          New-RandomToken
