@@ -12,4 +12,4 @@ jobs:
           allowprerelease: "True"
       - run: |
           Import-Module -Name 'hugoalh.GitHubActionsToolkit' -Scope 'Local'
-          Write-GitHubActionsNotice -Message ('1234567890' * 500) -Summary '::test::'
+          Write-GitHubActionsNotice -Message "::notice::$('1234567890' * 500)" -Summary 'Test'
