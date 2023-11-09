@@ -5,7 +5,5 @@ jobs:
     runs-on: "ubuntu-latest"
     steps:
       - run: |
-          Write-Host -Object '::group::'
-          Write-Host -Object 'foo bar'
-          Write-Host -Object '::endgroup::'
+          Write-Host -Object '%3A%3Atest%3A%3A'
         shell: "pwsh"
