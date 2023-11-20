@@ -13,3 +13,5 @@ jobs:
       - run: |
           Import-Module -Name 'hugoalh.GitHubActionsToolkit' -Scope 'Local'
           Write-GitHubActionsNotice -Message "::notice::$('1234567890' * 500)" -Summary 'Test'
+          Write-GitHubActionsDebug -Message 'Hello, world!' -SkipEmptyMessage
+          Write-GitHubActionsDebug -Message 'Hello, world!' -SkipEmptyMessage -PassThru
