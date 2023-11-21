@@ -1,9 +1,15 @@
 on:
   workflow_dispatch:
+defaults:
+  run:
+    shell: "pwsh"
 jobs:
   test:
     runs-on: "ubuntu-latest"
     steps:
+      - uses: "hugoalh-studio/setup-powershell-toolkit-ghaction@main"
+        with:
+          allowprerelease: "True"
       - run: |
-          Write-Host -Object '%3A%3Atest%3A%3A'
-        shell: "pwsh"
+          Import-Module -Name 'hugoalh.GitHubActionsToolkit' -Scope 'Local'
+          Write-GitHubActionsStdOutCommand -StdOutCommand 'group' -Value "1`n2`n3"
