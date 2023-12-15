@@ -19,6 +19,6 @@ jobs:
           console.log(res.value);
           '@ -Encoding 'UTF8NoBOM'
           deno run --allow-all --unstable $FilePath
-      - uses: "actions/upload-artifact@v3.1.2"
+      - uses: "actions/upload-artifact@v4.0.0"
         with:
           path: "${{github.workspace}}"
