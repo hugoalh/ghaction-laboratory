@@ -1,8 +1,6 @@
+# yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
 on:
   workflow_dispatch:
-defaults:
-  run:
-    shell: "pwsh"
 jobs:
   test:
     runs-on: "ubuntu-latest"
@@ -15,3 +13,4 @@ jobs:
           Write-GitHubActionsNotice -Message "::notice::$('1234567890' * 500)" -Summary 'Test'
           Write-GitHubActionsDebug -Message 'Hello, world!' -SkipEmptyMessage
           Write-GitHubActionsDebug -Message 'Hello, world!' -SkipEmptyMessage -PassThru
+        shell: "pwsh"

@@ -1,8 +1,6 @@
+# yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
 on:
   workflow_dispatch:
-defaults:
-  run:
-    shell: "pwsh"
 jobs:
   test:
     runs-on: "ubuntu-latest"
@@ -13,3 +11,4 @@ jobs:
       - run: |
           Import-Module -Name 'hugoalh.GitHubActionsToolkit' -Scope 'Local'
           Write-GitHubActionsStdOutCommand -StdOutCommand 'group' -Value "1`n2`n3"
+        shell: "pwsh"
