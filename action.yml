@@ -10,19 +10,13 @@ runs:
         allowprerelease: "True"
     - run: |
         Import-Module -Name 'hugoalh.GitHubActionsToolkit' -Scope 'Local'
-        Invoke-GitHubActionsNodeJsWrapper -Name '$success' -Argument @{
-          'message' = 'Success'
-        }
-        Invoke-GitHubActionsNodeJsWrapper -Name '$fail' -Argument @{
-          'message' = 'Fail'
-        } -ErrorAction 'Continue'
         [String]$FilePath = Join-Path -Path $Env:GITHUB_WORKSPACE -ChildPath 'test.txt'
-        If (Restore-GitHubActionsCache -Key @('test') -LiteralPath @($Env:GITHUB_WORKSPACE)) {
+        If ($Null -ne (Restore-GitHubActionsCache -Path @($Env:GITHUB_WORKSPACE) -Key @('test'))) {
           Get-Content -LiteralPath $FilePath -Encoding 'UTF8NoBOM'
         }
         Set-Content -LiteralPath $FilePath -Value (New-Guid).Guid -PassThru -Force -Confirm:$False -Encoding 'UTF8NoBOM'
-        Save-GitHubActionsCache -Key 'test' -LiteralPath @($Env:GITHUB_WORKSPACE)
-        Export-GitHubActionsArtifact -Name 'test' -LiteralPath @($Env:GITHUB_WORKSPACE)
+        Save-GitHubActionsCache -Path @($Env:GITHUB_WORKSPACE) -Key 'test'
+        Export-GitHubActionsArtifact -Name 'test' -LiteralPath @($Env:GITHUB_WORKSPACE) -RootDirectory $Env:GITHUB_WORKSPACE
       shell: "pwsh"
 branding:
   icon: "package"
